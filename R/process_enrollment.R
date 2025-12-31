@@ -239,8 +239,8 @@ process_school_enr <- function(df, end_year) {
     result$corporation_id <- NA_character_
   }
 
-  # School ID
-  school_id_col <- find_col(c("^IDOE_SCHOOL_ID$", "^SCHOOL_ID$"))
+  # School ID (IDOE uses "SCHL_ID" in their files)
+  school_id_col <- find_col(c("^IDOE_SCHOOL_ID$", "^SCHOOL_ID$", "^SCHL_ID$"))
   if (!is.null(school_id_col)) {
     result$school_id <- standardize_school_id(df[[school_id_col]])
   } else {
@@ -255,8 +255,8 @@ process_school_enr <- function(df, end_year) {
     result$corporation_name <- NA_character_
   }
 
-  # School name
-  school_name_col <- find_col(c("^SCHOOL_NAME$", "^SCHOOL$"))
+  # School name (IDOE uses "SCHL_NAME" in their files)
+  school_name_col <- find_col(c("^SCHOOL_NAME$", "^SCHOOL$", "^SCHL_NAME$"))
   if (!is.null(school_name_col)) {
     result$school_name <- clean_school_name(df[[school_name_col]])
   } else {

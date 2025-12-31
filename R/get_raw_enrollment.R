@@ -109,10 +109,22 @@ download_and_merge_corp_data <- function(end_year) {
   # Start with grade data as base
   result <- grade_df
 
+  # IDOE files use CORP_ID as the corporation ID column
+  # Find the correct ID column name that exists in the data
+  find_corp_id_col <- function(df) {
+    possible_cols <- c("CORP_ID", "IDOE_CORPORATION_ID", "CORPORATION_ID")
+    for (col in possible_cols) {
+      if (col %in% names(df)) return(col)
+    }
+    NULL
+  }
+
+  corp_id_col <- find_corp_id_col(result)
+
   # Merge ethnicity data
-  if (!is.null(ethnicity_df) && nrow(ethnicity_df) > 0) {
-    # Find common ID columns
-    id_cols <- c("IDOE_CORPORATION_ID", "YEAR")
+  if (!is.null(ethnicity_df) && nrow(ethnicity_df) > 0 && !is.null(corp_id_col)) {
+    # Find common ID columns (CORP_ID or similar, plus YEAR)
+    id_cols <- c(corp_id_col, "YEAR")
     id_cols <- id_cols[id_cols %in% names(result) & id_cols %in% names(ethnicity_df)]
 
     if (length(id_cols) > 0) {
@@ -126,8 +138,8 @@ download_and_merge_corp_data <- function(end_year) {
   }
 
   # Merge sped/ell data
-  if (!is.null(sped_ell_df) && nrow(sped_ell_df) > 0) {
-    id_cols <- c("IDOE_CORPORATION_ID", "YEAR")
+  if (!is.null(sped_ell_df) && nrow(sped_ell_df) > 0 && !is.null(corp_id_col)) {
+    id_cols <- c(corp_id_col, "YEAR")
     id_cols <- id_cols[id_cols %in% names(result) & id_cols %in% names(sped_ell_df)]
 
     if (length(id_cols) > 0) {
@@ -140,8 +152,8 @@ download_and_merge_corp_data <- function(end_year) {
   }
 
   # Merge gender data
-  if (!is.null(gender_df) && nrow(gender_df) > 0) {
-    id_cols <- c("IDOE_CORPORATION_ID", "YEAR")
+  if (!is.null(gender_df) && nrow(gender_df) > 0 && !is.null(corp_id_col)) {
+    id_cols <- c(corp_id_col, "YEAR")
     id_cols <- id_cols[id_cols %in% names(result) & id_cols %in% names(gender_df)]
 
     if (length(id_cols) > 0) {
@@ -176,9 +188,36 @@ download_and_merge_school_data <- function(end_year) {
   # Start with grade data as base
   result <- grade_df
 
+  # IDOE files use CORP_ID and SCHL_ID as ID columns
+  # Find the correct ID column names that exist in the data
+  find_id_col <- function(df, possible_cols) {
+    for (col in possible_cols) {
+      if (col %in% names(df)) return(col)
+    }
+    NULL
+  }
+
+  corp_id_col <- find_id_col(result, c("CORP_ID", "IDOE_CORPORATION_ID", "CORPORATION_ID"))
+  school_id_col <- find_id_col(result, c("SCHL_ID", "IDOE_SCHOOL_ID", "SCHOOL_ID"))
+
+  # Build ID columns list for merging
+  build_id_cols <- function(df) {
+    id_cols <- c()
+    if (!is.null(corp_id_col) && corp_id_col %in% names(df)) {
+      id_cols <- c(id_cols, corp_id_col)
+    }
+    if (!is.null(school_id_col) && school_id_col %in% names(df)) {
+      id_cols <- c(id_cols, school_id_col)
+    }
+    if ("YEAR" %in% names(df)) {
+      id_cols <- c(id_cols, "YEAR")
+    }
+    id_cols
+  }
+
   # Merge ethnicity data
   if (!is.null(ethnicity_df) && nrow(ethnicity_df) > 0) {
-    id_cols <- c("IDOE_CORPORATION_ID", "IDOE_SCHOOL_ID", "YEAR")
+    id_cols <- build_id_cols(result)
     id_cols <- id_cols[id_cols %in% names(result) & id_cols %in% names(ethnicity_df)]
 
     if (length(id_cols) > 0) {
@@ -192,7 +231,7 @@ download_and_merge_school_data <- function(end_year) {
 
   # Merge sped/ell data
   if (!is.null(sped_ell_df) && nrow(sped_ell_df) > 0) {
-    id_cols <- c("IDOE_CORPORATION_ID", "IDOE_SCHOOL_ID", "YEAR")
+    id_cols <- build_id_cols(result)
     id_cols <- id_cols[id_cols %in% names(result) & id_cols %in% names(sped_ell_df)]
 
     if (length(id_cols) > 0) {
@@ -206,7 +245,7 @@ download_and_merge_school_data <- function(end_year) {
 
   # Merge gender data
   if (!is.null(gender_df) && nrow(gender_df) > 0) {
-    id_cols <- c("IDOE_CORPORATION_ID", "IDOE_SCHOOL_ID", "YEAR")
+    id_cols <- build_id_cols(result)
     id_cols <- id_cols[id_cols %in% names(result) & id_cols %in% names(gender_df)]
 
     if (length(id_cols) > 0) {
@@ -226,6 +265,9 @@ download_and_merge_school_data <- function(end_year) {
 #'
 #' Downloads an Excel file from IDOE and extracts data for the specified year.
 #' Uses a raw data cache to avoid re-downloading large files.
+#'
+#' IDOE Excel files have each year's data in a separate sheet named after
+#' the year (e.g., "2025", "2024", "2023", etc.).
 #'
 #' @param url URL of the Excel file
 #' @param file_type Type of file (for caching)
@@ -282,41 +324,64 @@ download_idoe_excel <- function(url, file_type, end_year) {
     return(data.frame())
   }
 
-  # Read Excel file
+  # Read Excel file - IDOE uses separate sheets for each year
   tryCatch({
-    df <- readxl::read_excel(
-      raw_cache_path,
-      col_types = "text"  # Read all as text, convert later
-    )
+    # Get available sheets
+    available_sheets <- readxl::excel_sheets(raw_cache_path)
+
+    # IDOE files have sheets named by year (e.g., "2025", "2024", etc.)
+    year_sheet <- as.character(end_year)
+
+    if (year_sheet %in% available_sheets) {
+      # Read the sheet for the requested year
+      df <- readxl::read_excel(
+        raw_cache_path,
+        sheet = year_sheet,
+        col_types = "text"  # Read all as text, convert later
+      )
+    } else {
+      # Fallback: try to read from default sheet and filter by YEAR column
+      # (in case IDOE changes their format in the future)
+      message(paste0("    Sheet '", year_sheet, "' not found in ", file_type,
+                     ". Available sheets: ", paste(available_sheets, collapse = ", ")))
+
+      df <- readxl::read_excel(
+        raw_cache_path,
+        col_types = "text"
+      )
+
+      # Try to filter by YEAR column if it exists
+      names(df) <- toupper(gsub("[^A-Za-z0-9_]", "_", names(df)))
+      names(df) <- gsub("_+", "_", names(df))
+      names(df) <- gsub("_$", "", names(df))
+
+      year_col <- grep("^YEAR$|^SCHOOL_YEAR$|^SY$", names(df), value = TRUE)
+      if (length(year_col) > 0) {
+        year_col <- year_col[1]
+        df$parsed_year <- sapply(df[[year_col]], function(y) {
+          y <- as.character(y)
+          if (grepl("-", y)) {
+            parts <- strsplit(y, "-")[[1]]
+            as.integer(parts[length(parts)])
+          } else {
+            as.integer(y)
+          }
+        })
+        df <- df[df$parsed_year == end_year, , drop = FALSE]
+        df$parsed_year <- NULL
+      } else {
+        warning(paste("Year", end_year, "not found in", file_type))
+        return(data.frame())
+      }
+    }
 
     # Standardize column names (uppercase, no spaces)
     names(df) <- toupper(gsub("[^A-Za-z0-9_]", "_", names(df)))
     names(df) <- gsub("_+", "_", names(df))
     names(df) <- gsub("_$", "", names(df))
 
-    # Filter to requested year
-    # IDOE uses "YEAR" column in format like "2023-2024" or just "2024"
-    year_col <- grep("^YEAR$|^SCHOOL_YEAR$|^SY$", names(df), value = TRUE)
-
-    if (length(year_col) > 0) {
-      year_col <- year_col[1]
-
-      # Parse year values - handle both "2023-2024" and "2024" formats
-      df$parsed_year <- sapply(df[[year_col]], function(y) {
-        y <- as.character(y)
-        if (grepl("-", y)) {
-          # Format: "2023-2024" -> 2024
-          parts <- strsplit(y, "-")[[1]]
-          as.integer(parts[length(parts)])
-        } else {
-          # Format: "2024"
-          as.integer(y)
-        }
-      })
-
-      df <- df[df$parsed_year == end_year, , drop = FALSE]
-      df$parsed_year <- NULL
-    }
+    # Add YEAR column for downstream processing
+    df$YEAR <- as.character(end_year)
 
     df
 
