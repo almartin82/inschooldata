@@ -2,12 +2,13 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/almartin82/inschooldata/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/almartin82/inschooldata/actions/workflows/R-CMD-check.yaml)
+[![Python Tests](https://github.com/almartin82/inschooldata/actions/workflows/python-test.yaml/badge.svg)](https://github.com/almartin82/inschooldata/actions/workflows/python-test.yaml)
 [![pkgdown](https://github.com/almartin82/inschooldata/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/almartin82/inschooldata/actions/workflows/pkgdown.yaml)
 <!-- badges: end -->
 
 **[Documentation](https://almartin82.github.io/inschooldata/)** | **[Getting Started](https://almartin82.github.io/inschooldata/articles/quickstart.html)**
 
-Fetch and analyze Indiana public school enrollment data from the Indiana Department of Education (IDOE).
+Fetch and analyze Indiana school enrollment data from the Indiana Department of Education (IDOE) in R or Python.
 
 ## What can you find with inschooldata?
 
@@ -175,6 +176,8 @@ remotes::install_github("almartin82/inschooldata")
 
 ## Quick start
 
+### R
+
 ```r
 library(inschooldata)
 library(dplyr)
@@ -204,6 +207,32 @@ enr_2025 %>%
          subgroup %in% c("white", "black", "hispanic", "asian")) %>%
   group_by(corporation_name, subgroup) %>%
   summarize(n = sum(n_students, na.rm = TRUE))
+```
+
+### Python
+
+```python
+import pyinschooldata as ind
+
+# Fetch one year
+enr_2025 = ind.fetch_enr(2025)
+
+# Fetch multiple years
+enr_recent = ind.fetch_enr_multi([2020, 2021, 2022, 2023, 2024, 2025])
+
+# State totals
+state_total = enr_2025[
+    (enr_2025['is_state'] == True) &
+    (enr_2025['subgroup'] == 'total_enrollment') &
+    (enr_2025['grade_level'] == 'TOTAL')
+]
+
+# Corporation breakdown
+corp_totals = enr_2025[
+    (enr_2025['is_corporation'] == True) &
+    (enr_2025['subgroup'] == 'total_enrollment') &
+    (enr_2025['grade_level'] == 'TOTAL')
+].sort_values('n_students', ascending=False)[['corporation_name', 'n_students']]
 ```
 
 ## Data availability
