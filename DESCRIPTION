@@ -1,13 +1,10 @@
 Package: inschooldata
-Title: Fetch and Process Indiana School Data
+Title: Indiana School Data
 Version: 0.1.0
 Authors@R:
     person("Al", "Martin", , "almartin@example.com", role = c("aut", "cre"))
-Description: Downloads and processes school data from the Indiana Department of
-    Education (IDOE). Provides functions for fetching enrollment data from
-    IDOE's Data Center and transforming it into tidy format for analysis.
-    Supports historical data from 2006 to present across corporation (district)
-    and school levels.
+Description: A simple, consistent interface for accessing Indiana
+    school data in R.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
