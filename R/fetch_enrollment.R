@@ -34,7 +34,7 @@
 #' enr_fresh <- fetch_enr(2024, use_cache = FALSE)
 #'
 #' # Filter to specific corporation
-#' indianapolis_ps <- enr_2024 %>%
+#' indianapolis_ps <- enr_2024 |>
 #'   dplyr::filter(corporation_id == "5385")
 #' }
 fetch_enr <- function(end_year, tidy = TRUE, use_cache = TRUE) {
@@ -59,7 +59,7 @@ fetch_enr <- function(end_year, tidy = TRUE, use_cache = TRUE) {
 
   # Optionally tidy
   if (tidy) {
-    processed <- tidy_enr(processed) %>%
+    processed <- tidy_enr(processed) |>
       id_enr_aggs()
   }
 
@@ -87,8 +87,8 @@ fetch_enr <- function(end_year, tidy = TRUE, use_cache = TRUE) {
 #' enr_multi <- fetch_enr_multi(2022:2024)
 #'
 #' # Track enrollment trends
-#' enr_multi %>%
-#'   dplyr::filter(is_state, subgroup == "total_enrollment", grade_level == "TOTAL") %>%
+#' enr_multi |>
+#'   dplyr::filter(is_state, subgroup == "total_enrollment", grade_level == "TOTAL") |>
 #'   dplyr::select(end_year, n_students)
 #' }
 fetch_enr_multi <- function(end_years, tidy = TRUE, use_cache = TRUE) {
