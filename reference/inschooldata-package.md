@@ -58,7 +58,7 @@ Data is sourced from the Indiana Department of Education's Data Center:
 
 ## Data Availability
 
-- Years: 2006-2025 (20 years of historical data)
+- Years: 2006-2024 (19 years of historical data)
 
 - Aggregation levels: State, Corporation (District), School
 
@@ -70,6 +70,8 @@ Data is sourced from the Indiana Department of Education's Data Center:
 ## See also
 
 Useful links:
+
+- <https://almartin82.github.io/inschooldata>
 
 - <https://github.com/almartin82/inschooldata>
 

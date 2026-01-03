@@ -10,4 +10,4 @@ get_max_year()
 
 ## Value
 
-Integer representing most recent available year
+Integer representing most recent available year (2024)
