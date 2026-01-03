@@ -32,10 +32,6 @@ enr %>%
   select(end_year, n_students)
 ```
 
-![Indiana enrollment stability](reference/figures/enrollment-stable.png)
-
-Indiana enrollment stability
-
 ------------------------------------------------------------------------
 
 ### 2. Indianapolis Public Schools is shrinking fast
@@ -52,10 +48,6 @@ enr %>%
          is_corporation, grade_level == "TOTAL", subgroup == "total_enrollment") %>%
   select(end_year, n_students)
 ```
-
-![IPS decline](reference/figures/ips-decline.png)
-
-IPS decline
 
 ------------------------------------------------------------------------
 
@@ -89,10 +81,6 @@ enr %>%
   filter(is_state, grade_level == "TOTAL", subgroup == "hispanic") %>%
   select(end_year, n_students, pct)
 ```
-
-![Hispanic growth](reference/figures/hispanic-growth.png)
-
-Hispanic growth
 
 ------------------------------------------------------------------------
 
@@ -137,10 +125,6 @@ enr %>%
          is_corporation, grade_level == "TOTAL", subgroup == "total_enrollment") %>%
   select(end_year, n_students)
 ```
-
-![Gary collapse](reference/figures/gary-collapse.png)
-
-Gary collapse
 
 ------------------------------------------------------------------------
 
