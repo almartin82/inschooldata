@@ -380,6 +380,36 @@ download_idoe_excel <- function(url, file_type, end_year) {
     names(df) <- gsub("_+", "_", names(df))
     names(df) <- gsub("_$", "", names(df))
 
+    # Handle gender file's merged Excel headers
+    # The gender files have merged cells causing columns to be named "_1", "_2" etc.
+    # instead of "CORP_ID", "CORP_NAME"
+    if ("_1" %in% names(df) && !("CORP_ID" %in% names(df))) {
+      # First column should be CORP_ID
+      names(df)[names(df) == "_1"] <- "CORP_ID"
+
+      # Second column should be CORP_NAME (or SCHL_NAME for school files)
+      if ("_2" %in% names(df)) {
+        # Check if this is a school file (has _3 which would be school name)
+        if ("_3" %in% names(df)) {
+          names(df)[names(df) == "_2"] <- "CORP_NAME"
+          names(df)[names(df) == "_3"] <- "SCHL_NAME"
+          # _4 would be SCHL_ID
+          if ("_4" %in% names(df)) {
+            names(df)[names(df) == "_4"] <- "SCHL_ID"
+          }
+        } else {
+          names(df)[names(df) == "_2"] <- "CORP_NAME"
+        }
+      }
+
+      # Remove sub-header row that contains "Female", "Male" labels
+      # This row appears when Excel has merged cells for Male/Female sub-headers
+      first_row_corp <- df$CORP_ID[1]
+      if (!is.na(first_row_corp) && grepl("Corp|ID|Female|Male", first_row_corp, ignore.case = TRUE)) {
+        df <- df[-1, , drop = FALSE]
+      }
+    }
+
     # Add YEAR column for downstream processing
     df$YEAR <- as.character(end_year)
 

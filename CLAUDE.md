@@ -4,6 +4,37 @@
 
 ---
 
+# inschooldata - Indiana School Enrollment Data
+
+## Data Source
+
+Indiana DOE Data Center: https://www.in.gov/doe/it/data-center-and-reports/
+
+### Available Files (2006-2025)
+
+| File | URL Pattern |
+|------|-------------|
+| Corporation Enrollment by Grade | `corporation-enrollment-grade-2006-25.xlsx` |
+| Corporation Enrollment by Ethnicity/FRL | `corporation-enrollment-ethnicity-free-reduced-price-meal-status-2006-25.xlsx` |
+| Corporation Enrollment by SPED/ELL | `corporation-enrollment-ell-special-education-2006-25-updated.xlsx` |
+| Corporation Enrollment by Gender | `corporation-enrollment-grade-gender-2006-25.xlsx` |
+| School Enrollment by Grade | `school-enrollment-grade-2006-25.xlsx` |
+| School Enrollment by Ethnicity/FRL | `school-enrollment-ethnicity-and-free-reduced-price-meal-status-2006-25-final.xlsx` |
+| School Enrollment by SPED/ELL | `school-enrollment-ell-special-education-2006-25-updated.xlsx` |
+| School Enrollment by Gender | `school-enrollment-grade-gender-2006-25.xlsx` |
+
+Base URL: `https://www.in.gov/doe/files/`
+
+### Known Issues (Fixed)
+
+**Gender File Merged Excel Headers**: The gender files have merged cells in the Excel header causing `readxl` to misparse column names as `_1`, `_2` instead of `CORP_ID`, `CORP_NAME`. The package handles this by:
+1. Detecting when first column is `_1` instead of `CORP_ID`
+2. Renaming columns appropriately
+3. Removing the sub-header row containing "Female"/"Male" labels
+
+Without this fix, joins fall back to YEAR-only matching, causing a cartesian product (418 × 419 = 175,142 rows instead of 418).
+
+---
 
 # Claude Code Instructions
 
