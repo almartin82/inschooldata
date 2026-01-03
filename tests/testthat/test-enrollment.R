@@ -23,7 +23,6 @@ test_that("get_available_years returns valid range", {
   expect_true(is.integer(years))
   expect_true(2006 %in% years)
   expect_true(2024 %in% years)
-  expect_true(2025 %in% years)
   expect_equal(min(years), 2006)
 })
 
@@ -31,7 +30,7 @@ test_that("validate_year works correctly", {
   # Valid years should not error
   expect_true(validate_year(2020))
   expect_true(validate_year(2006))
-  expect_true(validate_year(2025))
+  expect_true(validate_year(2024))
 
   # Invalid years should error
   expect_error(validate_year(2005), "end_year must be between")
@@ -182,13 +181,13 @@ test_that("earliest available year (2006) works", {
   expect_equal(unique(result$end_year), 2006)
 })
 
-test_that("most recent year (2025) works", {
+test_that("most recent year (2024) works", {
   skip_on_cran()
   skip_if_offline()
 
-  result <- fetch_enr(2025, tidy = FALSE, use_cache = TRUE)
+  result <- fetch_enr(2024, tidy = FALSE, use_cache = TRUE)
 
   expect_true(is.data.frame(result))
   expect_true(nrow(result) > 0)
-  expect_equal(unique(result$end_year), 2025)
+  expect_equal(unique(result$end_year), 2024)
 })

@@ -8,7 +8,7 @@ fetch_enr(end_year, tidy = TRUE, use_cache = TRUE)
 }
 \arguments{
 \item{end_year}{A school year. Year is the end of the academic year - eg 2023-24
-school year is year '2024'. Valid values are 2006-2025.}
+school year is year '2024'. Valid values are 2006-2024.}
 
 \item{tidy}{If TRUE (default), returns data in long (tidy) format with subgroup
 column. If FALSE, returns wide format.}
@@ -37,7 +37,7 @@ enr_wide <- fetch_enr(2024, tidy = FALSE)
 enr_fresh <- fetch_enr(2024, use_cache = FALSE)
 
 # Filter to specific corporation
-indianapolis_ps <- enr_2024 \%>\%
+indianapolis_ps <- enr_2024 |>
   dplyr::filter(corporation_id == "5385")
 }
 }

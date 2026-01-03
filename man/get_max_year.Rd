@@ -7,7 +7,7 @@
 get_max_year()
 }
 \value{
-Integer representing most recent available year
+Integer representing most recent available year (2024)
 }
 \description{
 Get the maximum available year

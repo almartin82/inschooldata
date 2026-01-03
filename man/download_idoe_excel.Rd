@@ -22,6 +22,6 @@ Uses a raw data cache to avoid re-downloading large files.
 }
 \details{
 IDOE Excel files have each year's data in a separate sheet named after
-the year (e.g., "2025", "2024", "2023", etc.).
+the year (e.g., "2024", "2023", "2022", etc.).
 }
 \keyword{internal}

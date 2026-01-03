@@ -12,7 +12,7 @@
 # files. The package downloads these files once and caches them to avoid
 # repeated downloads.
 #
-# Available data files (all in Excel format, covering 2006-2025):
+# Available data files (all in Excel format, covering 2006-2024):
 # - Corporation Enrollment by Grade Level
 # - Corporation Enrollment by Ethnicity and Free/Reduced Price Meal Status
 # - Corporation Enrollment by Special Education and ELL
@@ -267,7 +267,7 @@ download_and_merge_school_data <- function(end_year) {
 #' Uses a raw data cache to avoid re-downloading large files.
 #'
 #' IDOE Excel files have each year's data in a separate sheet named after
-#' the year (e.g., "2025", "2024", "2023", etc.).
+#' the year (e.g., "2024", "2023", "2022", etc.).
 #'
 #' @param url URL of the Excel file
 #' @param file_type Type of file (for caching)
@@ -329,7 +329,7 @@ download_idoe_excel <- function(url, file_type, end_year) {
     # Get available sheets
     available_sheets <- readxl::excel_sheets(raw_cache_path)
 
-    # IDOE files have sheets named by year (e.g., "2025", "2024", etc.)
+    # IDOE files have sheets named by year (e.g., "2024", "2023", etc.)
     year_sheet <- as.character(end_year)
 
     if (year_sheet %in% available_sheets) {

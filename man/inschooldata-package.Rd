@@ -51,7 +51,7 @@ Data is sourced from the Indiana Department of Education's Data Center:
 \section{Data Availability}{
 
 \itemize{
-\item Years: 2006-2025 (20 years of historical data)
+\item Years: 2006-2024 (19 years of historical data)
 \item Aggregation levels: State, Corporation (District), School
 \item Demographics: Race/ethnicity, gender, special education, ELL, free/reduced lunch
 \item Grade levels: PK, K, 1-12
@@ -61,6 +61,7 @@ Data is sourced from the Indiana Department of Education's Data Center:
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://almartin82.github.io/inschooldata}
   \item \url{https://github.com/almartin82/inschooldata}
   \item Report bugs at \url{https://github.com/almartin82/inschooldata/issues}
 }

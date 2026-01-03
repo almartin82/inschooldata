@@ -49,10 +49,10 @@ get_min_year <- function() {
 
 #' Get the maximum available year
 #'
-#' @return Integer representing most recent available year
+#' @return Integer representing most recent available year (2024)
 #' @keywords internal
 get_max_year <- function() {
-  2025L
+  2024L
 }
 
 
