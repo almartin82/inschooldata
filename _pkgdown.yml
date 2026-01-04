@@ -24,11 +24,9 @@ navbar:
       text: Articles
       menu:
       - text: "---"
-      - text: "Tutorials"
-      - text: Getting Started
-        href: articles/quickstart.html
-      - text: Data Quality Analysis
-        href: articles/data-quality-qa.html
+      - text: "Stories & Analysis"
+      - text: Enrollment Trends
+        href: articles/enrollment-trends.html
 
 reference:
 - title: Fetch Data
