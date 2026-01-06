@@ -1,9 +1,9 @@
 Package: inschooldata
 Title: Indiana School Data
 Version: 0.1.0
-Authors@R:
 Author: Al Martin [aut, cre]
 Maintainer: Al Martin <almartin@example.com>
+Authors@R:
     person("Al", "Martin", , "almartin@example.com", role = c("aut", "cre"))
 Description: A simple, consistent interface for accessing Indiana
     school data in Python and R.
