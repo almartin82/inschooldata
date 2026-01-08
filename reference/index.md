@@ -11,6 +11,15 @@ Download enrollment data from IDOE
 - [`get_available_years()`](https://almartin82.github.io/inschooldata/reference/get_available_years.md)
   : Get available years for Indiana enrollment data
 
+## School Directory
+
+Fetch school directory information
+
+- [`fetch_directory()`](https://almartin82.github.io/inschooldata/reference/fetch_directory.md)
+  : Fetch Indiana school directory data
+- [`get_directory_years()`](https://almartin82.github.io/inschooldata/reference/get_directory_years.md)
+  : Get available years for directory data
+
 ## Process & Tidy
 
 Transform data into analysis-ready formats
