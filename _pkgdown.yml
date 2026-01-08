@@ -36,6 +36,12 @@ reference:
   - fetch_enr_multi
   - get_available_years
 
+- title: School Directory
+  desc: Fetch school directory information
+  contents:
+  - fetch_directory
+  - get_directory_years
+
 - title: Process & Tidy
   desc: Transform data into analysis-ready formats
   contents:
