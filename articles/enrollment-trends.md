@@ -34,11 +34,11 @@ if (is.list(years)) {
 }
 
 # Fetch data
-enr <- fetch_enr_multi((max_year - 9):max_year)
+enr <- fetch_enr_multi((max_year - 9):max_year, use_cache = TRUE)
 key_years <- seq(max(min_year, 2006), max_year, by = 5)
 if (!max_year %in% key_years) key_years <- c(key_years, max_year)
-enr_long <- fetch_enr_multi(key_years)
-enr_current <- fetch_enr(max_year)
+enr_long <- fetch_enr_multi(key_years, use_cache = TRUE)
+enr_current <- fetch_enr(max_year, use_cache = TRUE)
 ```
 
 ## 1. Indiana is stable while neighbors decline
