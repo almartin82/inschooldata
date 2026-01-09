@@ -1,32 +1,13 @@
----
-title: "Indiana Enrollment Trends"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Indiana Enrollment Trends}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
+# Indiana Enrollment Trends
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.width = 10,
-  fig.height = 6,
-  out.width = "100%",
-  message = FALSE,
-  warning = FALSE
-)
-```
-
-```{r load-packages}
+``` r
 library(inschooldata)
 library(ggplot2)
 library(dplyr)
 library(scales)
 ```
 
-```{r theme}
+``` r
 theme_readme <- function() {
   theme_minimal(base_size = 14) +
     theme(
@@ -41,7 +22,7 @@ colors <- c("total" = "#2C3E50", "white" = "#3498DB", "black" = "#E74C3C",
             "hispanic" = "#F39C12", "asian" = "#9B59B6")
 ```
 
-```{r fetch-data, cache = TRUE}
+``` r
 # Get available years
 years <- get_available_years()
 if (is.list(years)) {
@@ -62,9 +43,11 @@ enr_current <- fetch_enr(max_year, use_cache = TRUE)
 
 ## 1. Indiana is stable while neighbors decline
 
-While Illinois and Ohio lose students, Indiana has held steady at around 1.05 million for a decade. The Hoosier State is neither booming nor busting.
+While Illinois and Ohio lose students, Indiana has held steady at around
+1.05 million for a decade. The Hoosier State is neither booming nor
+busting.
 
-```{r enrollment-stable}
+``` r
 state_trend <- enr %>%
   filter(is_state, grade_level == "TOTAL", subgroup == "total_enrollment")
 
@@ -78,11 +61,15 @@ ggplot(state_trend, aes(x = end_year, y = n_students)) +
   theme_readme()
 ```
 
+![](enrollment-trends_files/figure-html/enrollment-stable-1.png)
+
 ## 2. Indianapolis Public Schools is shrinking fast
 
-IPS lost 15,000 students since 2006, dropping from 35,000 to under 25,000. Charter schools and suburban flight are reshaping Indy education.
+IPS lost 15,000 students since 2006, dropping from 35,000 to under
+25,000. Charter schools and suburban flight are reshaping Indy
+education.
 
-```{r ips-decline}
+``` r
 ips <- enr_long %>%
   filter(is_corporation, grepl("Indianapolis Public", corporation_name, ignore.case = TRUE),
          subgroup == "total_enrollment", grade_level == "TOTAL")
@@ -97,11 +84,14 @@ ggplot(ips, aes(x = end_year, y = n_students)) +
   theme_readme()
 ```
 
-## 3. Hamilton County is Indiana's growth engine
+![](enrollment-trends_files/figure-html/ips-decline-1.png)
 
-Carmel, Fishers, Westfield, and Noblesville suburbs are booming. Hamilton County corporations added 20,000 students since 2010.
+## 3. Hamilton County is Indiana’s growth engine
 
-```{r hamilton-growth}
+Carmel, Fishers, Westfield, and Noblesville suburbs are booming.
+Hamilton County corporations added 20,000 students since 2010.
+
+``` r
 hamilton <- c("Carmel Clay Schools", "Hamilton Southeastern Schools",
               "Noblesville Schools", "Westfield-Washington Schools")
 
@@ -121,11 +111,14 @@ ggplot(hamilton_trend, aes(x = end_year, y = total)) +
   theme_readme()
 ```
 
+![](enrollment-trends_files/figure-html/hamilton-growth-1.png)
+
 ## 4. The Hispanic population has tripled
 
-Hispanic students went from 5% to 13% of enrollment since 2006. Northwest Indiana and Indianapolis drive this growth.
+Hispanic students went from 5% to 13% of enrollment since 2006.
+Northwest Indiana and Indianapolis drive this growth.
 
-```{r hispanic-growth}
+``` r
 hispanic <- enr_long %>%
   filter(is_state, grade_level == "TOTAL", subgroup == "hispanic")
 
@@ -138,11 +131,14 @@ ggplot(hispanic, aes(x = end_year, y = pct * 100)) +
   theme_readme()
 ```
 
+![](enrollment-trends_files/figure-html/hispanic-growth-1.png)
+
 ## 5. COVID hit Indiana kindergarten hard
 
-Indiana lost 8,000 kindergartners between 2020 and 2021. Recovery has been slow.
+Indiana lost 8,000 kindergartners between 2020 and 2021. Recovery has
+been slow.
 
-```{r covid-kindergarten}
+``` r
 k_trend <- enr %>%
   filter(is_state, subgroup == "total_enrollment",
          grade_level %in% c("K", "01", "06", "12")) %>%
@@ -164,11 +160,14 @@ ggplot(k_trend, aes(x = end_year, y = n_students, color = grade_label)) +
   theme_readme()
 ```
 
+![](enrollment-trends_files/figure-html/covid-kindergarten-1.png)
+
 ## 6. Economic disadvantage varies wildly by geography
 
-Over 250,000 Indiana students receive free lunch. Gary, East Chicago, and Indianapolis have 80%+ rates. Carmel and Zionsville are under 5%.
+Over 250,000 Indiana students receive free lunch. Gary, East Chicago,
+and Indianapolis have 80%+ rates. Carmel and Zionsville are under 5%.
 
-```{r free-lunch}
+``` r
 frl <- enr_current %>%
   filter(is_corporation, grade_level == "TOTAL", subgroup == "free_lunch") %>%
   arrange(desc(pct)) %>%
@@ -184,11 +183,14 @@ ggplot(frl, aes(x = corp_label, y = pct * 100)) +
   theme_readme()
 ```
 
+![](enrollment-trends_files/figure-html/free-lunch-1.png)
+
 ## 7. Gary Community School Corporation has collapsed
 
-Gary lost 20,000 students since 2006, dropping from 22,000 to under 5,000. This is one of the most dramatic declines in America.
+Gary lost 20,000 students since 2006, dropping from 22,000 to under
+5,000. This is one of the most dramatic declines in America.
 
-```{r gary-collapse}
+``` r
 gary <- enr_long %>%
   filter(is_corporation, grepl("Gary Community", corporation_name, ignore.case = TRUE),
          subgroup == "total_enrollment", grade_level == "TOTAL")
@@ -203,11 +205,15 @@ ggplot(gary, aes(x = end_year, y = n_students)) +
   theme_readme()
 ```
 
+![](enrollment-trends_files/figure-html/gary-collapse-1.png)
+
 ## 8. Virtual schools serve 15,000+ students
 
-Indiana's virtual charter schools have grown dramatically, especially after COVID. Indiana Virtual School and Indiana Connections Academy are among the largest.
+Indiana’s virtual charter schools have grown dramatically, especially
+after COVID. Indiana Virtual School and Indiana Connections Academy are
+among the largest.
 
-```{r virtual-schools}
+``` r
 virtual <- enr_current %>%
   filter(grepl("Virtual|Online|Connections|Digital", corporation_name, ignore.case = TRUE),
          grade_level == "TOTAL", subgroup == "total_enrollment") %>%
@@ -225,11 +231,15 @@ ggplot(virtual, aes(x = corp_label, y = n_students)) +
   theme_readme()
 ```
 
+![](enrollment-trends_files/figure-html/virtual-schools-1.png)
+
 ## 9. Evansville is bucking the urban decline
 
-While most urban districts shrink, Evansville Vanderburgh School Corp has remained stable at around 22,000 students. Southwest Indiana is different.
+While most urban districts shrink, Evansville Vanderburgh School Corp
+has remained stable at around 22,000 students. Southwest Indiana is
+different.
 
-```{r evansville-stable}
+``` r
 evansville <- enr %>%
   filter(is_corporation, grepl("Evansville Vanderburgh", corporation_name, ignore.case = TRUE),
          subgroup == "total_enrollment", grade_level == "TOTAL")
@@ -244,11 +254,14 @@ ggplot(evansville, aes(x = end_year, y = n_students)) +
   theme_readme()
 ```
 
+![](enrollment-trends_files/figure-html/evansville-stable-1.png)
+
 ## 10. Rural Indiana is consolidating
 
-Indiana had 320 corporations in 2006. Today it has under 300. Small rural districts continue to merge.
+Indiana had 320 corporations in 2006. Today it has under 300. Small
+rural districts continue to merge.
 
-```{r rural-consolidation}
+``` r
 corp_counts <- enr_long %>%
   filter(is_corporation, subgroup == "total_enrollment", grade_level == "TOTAL") %>%
   group_by(end_year) %>%
@@ -262,3 +275,5 @@ ggplot(corp_counts, aes(x = end_year, y = n_corporations)) +
        x = "School Year", y = "Number of Corporations") +
   theme_readme()
 ```
+
+![](enrollment-trends_files/figure-html/rural-consolidation-1.png)
