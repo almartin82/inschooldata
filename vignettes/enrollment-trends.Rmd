@@ -263,3 +263,9 @@ ggplot(corp_counts, aes(x = end_year, y = n_corporations)) +
        x = "School Year", y = "Number of Corporations") +
   theme_readme()
 ```
+
+## Session Info
+
+```{r session-info}
+sessionInfo()
+```
