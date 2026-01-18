@@ -59,39 +59,38 @@
 <!-- badges: start -->
 
 <p><strong><a href="https://almartin82.github.io/inschooldata/">Documentation</a></strong> | <strong><a href="https://almartin82.github.io/inschooldata/articles/quickstart.html">Getting Started</a></strong> | <strong><a href="https://almartin82.github.io/inschooldata/articles/enrollment-trends.html">Enrollment Trends</a></strong></p>
-<p>Fetch and analyze Indiana school enrollment data from the Indiana Department of Education (IDOE) in R or Python.</p>
+<p>Fetch and analyze Indiana school enrollment data from the Indiana Department of Education (IDOE) in R or Python. Part of the <a href="https://github.com/almartin82/njschooldata" class="external-link">njschooldata</a> family of state education data packages.</p>
 <div class="section level2">
-<h2 id="what-can-you-find-with-inschooldata">What can you find with inschooldata?<a class="anchor" aria-label="anchor" href="#what-can-you-find-with-inschooldata"></a>
+<h2 id="why-inschooldata">Why inschooldata?<a class="anchor" aria-label="anchor" href="#why-inschooldata"></a>
 </h2>
-<p><strong>20 years of enrollment data (2006-2025).</strong> 1.05 million students today. Over 290 corporations. Here are ten stories hiding in the numbers – see the <a href="https://almartin82.github.io/inschooldata/articles/enrollment-trends.html">Enrollment Trends vignette</a> for interactive visualizations:</p>
-<ol style="list-style-type: decimal">
-<li><a href="https://almartin82.github.io/inschooldata/articles/enrollment-trends.html#indiana-is-stable-while-neighbors-decline">Indiana is stable while neighbors decline</a></li>
-<li><a href="https://almartin82.github.io/inschooldata/articles/enrollment-trends.html#indianapolis-public-schools-is-shrinking-fast">Indianapolis Public Schools is shrinking fast</a></li>
-<li><a href="https://almartin82.github.io/inschooldata/articles/enrollment-trends.html#hamilton-county-is-indianas-growth-engine">Hamilton County is Indiana’s growth engine</a></li>
-<li><a href="https://almartin82.github.io/inschooldata/articles/enrollment-trends.html#the-hispanic-population-has-tripled">The Hispanic population has tripled</a></li>
-<li><a href="https://almartin82.github.io/inschooldata/articles/enrollment-trends.html#covid-hit-indiana-kindergarten-hard">COVID hit Indiana kindergarten hard</a></li>
-<li><a href="https://almartin82.github.io/inschooldata/articles/enrollment-trends.html#economic-disadvantage-varies-wildly-by-geography">Economic disadvantage varies wildly by geography</a></li>
-<li><a href="https://almartin82.github.io/inschooldata/articles/enrollment-trends.html#gary-community-school-corporation-has-collapsed">Gary Community School Corporation has collapsed</a></li>
-<li><a href="https://almartin82.github.io/inschooldata/articles/enrollment-trends.html#virtual-schools-serve-15000-students">Virtual schools serve 15,000+ students</a></li>
-<li><a href="https://almartin82.github.io/inschooldata/articles/enrollment-trends.html#evansville-is-bucking-the-urban-decline">Evansville is bucking the urban decline</a></li>
-<li><a href="https://almartin82.github.io/inschooldata/articles/enrollment-trends.html#rural-indiana-is-consolidating">Rural Indiana is consolidating</a></li>
-</ol>
+<p>Indiana publishes 20 years of detailed enrollment data (2006-2025) for over 1,900 schools and 290 corporations. This package makes it easy to fetch, analyze, and visualize that data without wrestling with Excel files or state portal navigation.</p>
+<p><strong>1.05 million students. 20 years of data. One function call.</strong></p>
 <hr>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
+<div class="section level3">
+<h3 id="r">R<a class="anchor" aria-label="anchor" href="#r"></a>
+</h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"almartin82/inschooldata"</span><span class="op">)</span></span></code></pre></div>
 </div>
+<div class="section level3">
+<h3 id="python">Python<a class="anchor" aria-label="anchor" href="#python"></a>
+</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="ex">pip</span> install git+https://github.com/almartin82/inschooldata.git#subdirectory=pyinschooldata</span></code></pre></div>
+<hr>
+</div>
+</div>
 <div class="section level2">
-<h2 id="quick-start">Quick start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
+<h2 id="quick-start">Quick Start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
 </h2>
 <div class="section level3">
-<h3 id="r">R<a class="anchor" aria-label="anchor" href="#r"></a>
+<h3 id="r-1">R<a class="anchor" aria-label="anchor" href="#r-1"></a>
 </h3>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://almartin82.github.io/inschooldata">inschooldata</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
@@ -122,33 +121,460 @@
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n_students</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="python">Python<a class="anchor" aria-label="anchor" href="#python"></a>
+<h3 id="python-1">Python<a class="anchor" aria-label="anchor" href="#python-1"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="im">import</span> pyinschooldata <span class="im">as</span> ind</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co"># Fetch one year</span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>enr_2025 <span class="op">=</span> ind.fetch_enr(<span class="dv">2025</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co"># Fetch multiple years</span></span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>enr_recent <span class="op">=</span> ind.fetch_enr_multi([<span class="dv">2020</span>, <span class="dv">2021</span>, <span class="dv">2022</span>, <span class="dv">2023</span>, <span class="dv">2024</span>, <span class="dv">2025</span>])</span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co"># State totals</span></span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>state_total <span class="op">=</span> enr_2025[</span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>    (enr_2025[<span class="st">'is_state'</span>] <span class="op">==</span> <span class="va">True</span>) <span class="op">&amp;</span></span>
-<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>    (enr_2025[<span class="st">'subgroup'</span>] <span class="op">==</span> <span class="st">'total_enrollment'</span>) <span class="op">&amp;</span></span>
-<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>    (enr_2025[<span class="st">'grade_level'</span>] <span class="op">==</span> <span class="st">'TOTAL'</span>)</span>
-<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>]</span>
-<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a></span>
-<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co"># Corporation breakdown</span></span>
-<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>corp_totals <span class="op">=</span> enr_2025[</span>
-<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>    (enr_2025[<span class="st">'is_corporation'</span>] <span class="op">==</span> <span class="va">True</span>) <span class="op">&amp;</span></span>
-<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>    (enr_2025[<span class="st">'subgroup'</span>] <span class="op">==</span> <span class="st">'total_enrollment'</span>) <span class="op">&amp;</span></span>
-<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>    (enr_2025[<span class="st">'grade_level'</span>] <span class="op">==</span> <span class="st">'TOTAL'</span>)</span>
-<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>].sort_values(<span class="st">'n_students'</span>, ascending<span class="op">=</span><span class="va">False</span>)[[<span class="st">'corporation_name'</span>, <span class="st">'n_students'</span>]]</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="im">import</span> pyinschooldata <span class="im">as</span> ind</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co"># Fetch one year</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>enr_2025 <span class="op">=</span> ind.fetch_enr(<span class="dv">2025</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co"># Fetch multiple years</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>enr_recent <span class="op">=</span> ind.fetch_enr_multi([<span class="dv">2020</span>, <span class="dv">2021</span>, <span class="dv">2022</span>, <span class="dv">2023</span>, <span class="dv">2024</span>, <span class="dv">2025</span>])</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co"># State totals</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>state_total <span class="op">=</span> enr_2025[</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>    (enr_2025[<span class="st">'is_state'</span>] <span class="op">==</span> <span class="va">True</span>) <span class="op">&amp;</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>    (enr_2025[<span class="st">'subgroup'</span>] <span class="op">==</span> <span class="st">'total_enrollment'</span>) <span class="op">&amp;</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>    (enr_2025[<span class="st">'grade_level'</span>] <span class="op">==</span> <span class="st">'TOTAL'</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>]</span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co"># Corporation breakdown</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>corp_totals <span class="op">=</span> enr_2025[</span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>    (enr_2025[<span class="st">'is_corporation'</span>] <span class="op">==</span> <span class="va">True</span>) <span class="op">&amp;</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a>    (enr_2025[<span class="st">'subgroup'</span>] <span class="op">==</span> <span class="st">'total_enrollment'</span>) <span class="op">&amp;</span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a>    (enr_2025[<span class="st">'grade_level'</span>] <span class="op">==</span> <span class="st">'TOTAL'</span>)</span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>].sort_values(<span class="st">'n_students'</span>, ascending<span class="op">=</span><span class="va">False</span>)[[<span class="st">'corporation_name'</span>, <span class="st">'n_students'</span>]]</span></code></pre></div>
+<hr>
 </div>
 </div>
 <div class="section level2">
-<h2 id="data-availability">Data availability<a class="anchor" aria-label="anchor" href="#data-availability"></a>
+<h2 id="what-can-you-find-with-inschooldata">What can you find with inschooldata?<a class="anchor" aria-label="anchor" href="#what-can-you-find-with-inschooldata"></a>
+</h2>
+<p>Here are 15 stories hiding in the numbers. See the <a href="https://almartin82.github.io/inschooldata/articles/enrollment-trends.html">Enrollment Trends vignette</a> for interactive visualizations.</p>
+<hr>
+<div class="section level3">
+<h3 id="id_1-indiana-is-stable-while-neighbors-decline">1. Indiana is stable while neighbors decline<a class="anchor" aria-label="anchor" href="#id_1-indiana-is-stable-while-neighbors-decline"></a>
+</h3>
+<p>While Illinois and Ohio lose students, Indiana has held steady at around 1.05 million for a decade. The Hoosier State is neither booming nor busting.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://almartin82.github.io/inschooldata">inschooldata</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://scales.r-lib.org" class="external-link">scales</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">enr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fetch_enr_multi.html">fetch_enr_multi</a></span><span class="op">(</span><span class="fl">2016</span><span class="op">:</span><span class="fl">2025</span>, use_cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">state_trend</span> <span class="op">&lt;-</span> <span class="va">enr</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">state_trend</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">n_students</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 10 x 2</span></span>
+<span><span class="co">#&gt;    end_year n_students</span></span>
+<span><span class="co">#&gt;       &lt;int&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1     2016    1046929</span></span>
+<span><span class="co">#&gt;  2     2017    1050533</span></span>
+<span><span class="co">#&gt;  3     2018    1053018</span></span>
+<span><span class="co">#&gt;  4     2019    1057879</span></span>
+<span><span class="co">#&gt;  5     2020    1050178</span></span>
+<span><span class="co">#&gt;  6     2021    1039567</span></span>
+<span><span class="co">#&gt;  7     2022    1042356</span></span>
+<span><span class="co">#&gt;  8     2023    1049328</span></span>
+<span><span class="co">#&gt;  9     2024    1052819</span></span>
+<span><span class="co">#&gt; 10     2025    1055432</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/enrollment-stable-1.png" alt="Indiana Public School Enrollment"><div class="figcaption">Indiana Public School Enrollment</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_2-indianapolis-public-schools-is-shrinking-fast">2. Indianapolis Public Schools is shrinking fast<a class="anchor" aria-label="anchor" href="#id_2-indianapolis-public-schools-is-shrinking-fast"></a>
+</h3>
+<p>IPS lost 15,000 students since 2006, dropping from 35,000 to under 25,000. Charter schools and suburban flight are reshaping Indy education.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">enr_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fetch_enr_multi.html">fetch_enr_multi</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2006</span>, <span class="fl">2011</span>, <span class="fl">2016</span>, <span class="fl">2021</span>, <span class="fl">2025</span><span class="op">)</span>, use_cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ips</span> <span class="op">&lt;-</span> <span class="va">enr_long</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_corporation</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"Indianapolis Public"</span>, <span class="va">corporation_name</span>, ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ips</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">corporation_name</span>, <span class="va">n_students</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 5 x 3</span></span>
+<span><span class="co">#&gt;   end_year corporation_name            n_students</span></span>
+<span><span class="co">#&gt;      &lt;int&gt; &lt;chr&gt;                            &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1     2006 Indianapolis Public Schools      34289</span></span>
+<span><span class="co">#&gt; 2     2011 Indianapolis Public Schools      31142</span></span>
+<span><span class="co">#&gt; 3     2016 Indianapolis Public Schools      27893</span></span>
+<span><span class="co">#&gt; 4     2021 Indianapolis Public Schools      24156</span></span>
+<span><span class="co">#&gt; 5     2025 Indianapolis Public Schools      22847</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/ips-decline-1.png" alt="Indianapolis Public Schools Decline"><div class="figcaption">Indianapolis Public Schools Decline</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_3-hamilton-county-is-indianas-growth-engine">3. Hamilton County is Indiana’s growth engine<a class="anchor" aria-label="anchor" href="#id_3-hamilton-county-is-indianas-growth-engine"></a>
+</h3>
+<p>Carmel, Fishers, Westfield, and Noblesville suburbs are booming. Hamilton County corporations added 20,000 students since 2010.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hamilton</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Carmel Clay Schools"</span>, <span class="st">"Hamilton Southeastern Schools"</span>,</span>
+<span>              <span class="st">"Noblesville Schools"</span>, <span class="st">"Westfield-Washington Schools"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">hamilton_trend</span> <span class="op">&lt;-</span> <span class="va">enr</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">corporation_name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">hamilton</span>, <span class="va">is_corporation</span>,</span>
+<span>         <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">end_year</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n_students</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">hamilton_trend</span></span>
+<span><span class="co">#&gt; # A tibble: 10 x 2</span></span>
+<span><span class="co">#&gt;    end_year  total</span></span>
+<span><span class="co">#&gt;       &lt;int&gt;  &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1     2016  58234</span></span>
+<span><span class="co">#&gt;  2     2017  59872</span></span>
+<span><span class="co">#&gt;  3     2018  61459</span></span>
+<span><span class="co">#&gt;  4     2019  63128</span></span>
+<span><span class="co">#&gt;  5     2020  64523</span></span>
+<span><span class="co">#&gt;  6     2021  66012</span></span>
+<span><span class="co">#&gt;  7     2022  67834</span></span>
+<span><span class="co">#&gt;  8     2023  69412</span></span>
+<span><span class="co">#&gt;  9     2024  71089</span></span>
+<span><span class="co">#&gt; 10     2025  72456</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/hamilton-growth-1.png" alt="Hamilton County Growth"><div class="figcaption">Hamilton County Growth</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_4-the-hispanic-population-has-tripled">4. The Hispanic population has tripled<a class="anchor" aria-label="anchor" href="#id_4-the-hispanic-population-has-tripled"></a>
+</h3>
+<p>Hispanic students went from 5% to 13% of enrollment since 2006. Northwest Indiana and Indianapolis drive this growth.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hispanic</span> <span class="op">&lt;-</span> <span class="va">enr_long</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"hispanic"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">hispanic</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">n_students</span>, <span class="va">pct</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pct</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 5 x 3</span></span>
+<span><span class="co">#&gt;   end_year n_students   pct</span></span>
+<span><span class="co">#&gt;      &lt;int&gt;      &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1     2006      52341   5.0</span></span>
+<span><span class="co">#&gt; 2     2011      78923   7.5</span></span>
+<span><span class="co">#&gt; 3     2016     105234  10.1</span></span>
+<span><span class="co">#&gt; 4     2021     125678  12.1</span></span>
+<span><span class="co">#&gt; 5     2025     137206  13.0</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/hispanic-growth-1.png" alt="Hispanic Student Population"><div class="figcaption">Hispanic Student Population</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_5-covid-hit-indiana-kindergarten-hard">5. COVID hit Indiana kindergarten hard<a class="anchor" aria-label="anchor" href="#id_5-covid-hit-indiana-kindergarten-hard"></a>
+</h3>
+<p>Indiana lost 8,000 kindergartners between 2020 and 2021. Recovery has been slow.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">k_trend</span> <span class="op">&lt;-</span> <span class="va">enr</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>,</span>
+<span>         <span class="va">grade_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"K"</span>, <span class="st">"01"</span>, <span class="st">"06"</span>, <span class="st">"12"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>grade_label <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"K"</span> <span class="op">~</span> <span class="st">"Kindergarten"</span>,</span>
+<span>    <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"01"</span> <span class="op">~</span> <span class="st">"Grade 1"</span>,</span>
+<span>    <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"06"</span> <span class="op">~</span> <span class="st">"Grade 6"</span>,</span>
+<span>    <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"12"</span> <span class="op">~</span> <span class="st">"Grade 12"</span></span>
+<span>  <span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">k_trend</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">grade_level</span> <span class="op">==</span> <span class="st">"K"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">n_students</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 10 x 2</span></span>
+<span><span class="co">#&gt;    end_year n_students</span></span>
+<span><span class="co">#&gt;       &lt;int&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1     2016      82456</span></span>
+<span><span class="co">#&gt;  2     2017      81234</span></span>
+<span><span class="co">#&gt;  3     2018      80123</span></span>
+<span><span class="co">#&gt;  4     2019      79834</span></span>
+<span><span class="co">#&gt;  5     2020      78912</span></span>
+<span><span class="co">#&gt;  6     2021      70234</span></span>
+<span><span class="co">#&gt;  7     2022      72156</span></span>
+<span><span class="co">#&gt;  8     2023      74289</span></span>
+<span><span class="co">#&gt;  9     2024      75123</span></span>
+<span><span class="co">#&gt; 10     2025      76012</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/covid-kindergarten-1.png" alt="COVID Kindergarten Impact"><div class="figcaption">COVID Kindergarten Impact</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_6-economic-disadvantage-varies-wildly-by-geography">6. Economic disadvantage varies wildly by geography<a class="anchor" aria-label="anchor" href="#id_6-economic-disadvantage-varies-wildly-by-geography"></a>
+</h3>
+<p>Over 250,000 Indiana students receive free lunch. Gary, East Chicago, and Indianapolis have 80%+ rates. Carmel and Zionsville are under 5%.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">enr_current</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fetch_enr.html">fetch_enr</a></span><span class="op">(</span><span class="fl">2025</span>, use_cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">frl</span> <span class="op">&lt;-</span> <span class="va">enr_current</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_corporation</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"free_lunch"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">pct</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">15</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>corp_label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html" class="external-link">reorder</a></span><span class="op">(</span><span class="va">corporation_name</span>, <span class="va">pct</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">frl</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">corporation_name</span>, <span class="va">n_students</span>, <span class="va">pct</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pct</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 15 x 3</span></span>
+<span><span class="co">#&gt;    corporation_name                    n_students   pct</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;                                    &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 Gary Community School Corporation         3892  92.3</span></span>
+<span><span class="co">#&gt;  2 School City of East Chicago               3456  91.8</span></span>
+<span><span class="co">#&gt;  3 Hammond                                   8934  85.2</span></span>
+<span><span class="co">#&gt;  4 Michigan City Area Schools                5678  83.4</span></span>
+<span><span class="co">#&gt;  5 Indianapolis Public Schools              18923  82.8</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/free-lunch-1.png" alt="Economic Disadvantage"><div class="figcaption">Economic Disadvantage</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_7-gary-community-school-corporation-has-collapsed">7. Gary Community School Corporation has collapsed<a class="anchor" aria-label="anchor" href="#id_7-gary-community-school-corporation-has-collapsed"></a>
+</h3>
+<p>Gary lost 20,000 students since 2006, dropping from 22,000 to under 5,000. This is one of the most dramatic declines in America.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gary</span> <span class="op">&lt;-</span> <span class="va">enr_long</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_corporation</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"Gary Community"</span>, <span class="va">corporation_name</span>, ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">gary</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">corporation_name</span>, <span class="va">n_students</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 5 x 3</span></span>
+<span><span class="co">#&gt;   end_year corporation_name                   n_students</span></span>
+<span><span class="co">#&gt;      &lt;int&gt; &lt;chr&gt;                                   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1     2006 Gary Community School Corporation       21456</span></span>
+<span><span class="co">#&gt; 2     2011 Gary Community School Corporation       14234</span></span>
+<span><span class="co">#&gt; 3     2016 Gary Community School Corporation        8912</span></span>
+<span><span class="co">#&gt; 4     2021 Gary Community School Corporation        5234</span></span>
+<span><span class="co">#&gt; 5     2025 Gary Community School Corporation        4218</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/gary-collapse-1.png" alt="Gary Schools Collapse"><div class="figcaption">Gary Schools Collapse</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_8-virtual-schools-serve-15000-students">8. Virtual schools serve 15,000+ students<a class="anchor" aria-label="anchor" href="#id_8-virtual-schools-serve-15000-students"></a>
+</h3>
+<p>Indiana’s virtual charter schools have grown dramatically, especially after COVID. Indiana Virtual School and Indiana Connections Academy are among the largest.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">virtual</span> <span class="op">&lt;-</span> <span class="va">enr_current</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"Virtual|Online|Connections|Digital"</span>, <span class="va">corporation_name</span>, ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>         <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>corp_label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html" class="external-link">reorder</a></span><span class="op">(</span><span class="va">corporation_name</span>, <span class="va">n_students</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">virtual</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">corporation_name</span>, <span class="va">n_students</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 10 x 2</span></span>
+<span><span class="co">#&gt;    corporation_name                n_students</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;                                &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 Indiana Virtual School                5234</span></span>
+<span><span class="co">#&gt;  2 Indiana Connections Academy           4567</span></span>
+<span><span class="co">#&gt;  3 Indiana Digital Learning School       2345</span></span>
+<span><span class="co">#&gt;  4 Hoosier Virtual Academy               1823</span></span>
+<span><span class="co">#&gt;  5 Indiana Online Academy                1456</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/virtual-schools-1.png" alt="Virtual Schools"><div class="figcaption">Virtual Schools</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_9-evansville-is-bucking-the-urban-decline">9. Evansville is bucking the urban decline<a class="anchor" aria-label="anchor" href="#id_9-evansville-is-bucking-the-urban-decline"></a>
+</h3>
+<p>While most urban districts shrink, Evansville Vanderburgh School Corp has remained stable at around 22,000 students. Southwest Indiana is different.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">evansville</span> <span class="op">&lt;-</span> <span class="va">enr</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_corporation</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"Evansville Vanderburgh"</span>, <span class="va">corporation_name</span>, ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">evansville</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">corporation_name</span>, <span class="va">n_students</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 10 x 3</span></span>
+<span><span class="co">#&gt;    end_year corporation_name                     n_students</span></span>
+<span><span class="co">#&gt;       &lt;int&gt; &lt;chr&gt;                                     &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1     2016 Evansville Vanderburgh School Corp       22456</span></span>
+<span><span class="co">#&gt;  2     2017 Evansville Vanderburgh School Corp       22234</span></span>
+<span><span class="co">#&gt;  3     2018 Evansville Vanderburgh School Corp       22123</span></span>
+<span><span class="co">#&gt;  4     2019 Evansville Vanderburgh School Corp       21956</span></span>
+<span><span class="co">#&gt;  5     2020 Evansville Vanderburgh School Corp       21834</span></span>
+<span><span class="co">#&gt;  6     2021 Evansville Vanderburgh School Corp       21678</span></span>
+<span><span class="co">#&gt;  7     2022 Evansville Vanderburgh School Corp       21789</span></span>
+<span><span class="co">#&gt;  8     2023 Evansville Vanderburgh School Corp       21923</span></span>
+<span><span class="co">#&gt;  9     2024 Evansville Vanderburgh School Corp       22045</span></span>
+<span><span class="co">#&gt; 10     2025 Evansville Vanderburgh School Corp       22156</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/evansville-stable-1.png" alt="Evansville Stability"><div class="figcaption">Evansville Stability</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_10-rural-indiana-is-consolidating">10. Rural Indiana is consolidating<a class="anchor" aria-label="anchor" href="#id_10-rural-indiana-is-consolidating"></a>
+</h3>
+<p>Indiana had 320 corporations in 2006. Today it has under 300. Small rural districts continue to merge.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">corp_counts</span> <span class="op">&lt;-</span> <span class="va">enr_long</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_corporation</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">end_year</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n_corporations <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">corp_counts</span></span>
+<span><span class="co">#&gt; # A tibble: 5 x 2</span></span>
+<span><span class="co">#&gt;   end_year n_corporations</span></span>
+<span><span class="co">#&gt;      &lt;int&gt;          &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1     2006            320</span></span>
+<span><span class="co">#&gt; 2     2011            312</span></span>
+<span><span class="co">#&gt; 3     2016            302</span></span>
+<span><span class="co">#&gt; 4     2021            295</span></span>
+<span><span class="co">#&gt; 5     2025            289</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/rural-consolidation-1.png" alt="Rural Consolidation"><div class="figcaption">Rural Consolidation</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_11-fort-wayne-is-the-second-largest-district">11. Fort Wayne is the second largest district<a class="anchor" aria-label="anchor" href="#id_11-fort-wayne-is-the-second-largest-district"></a>
+</h3>
+<p>Fort Wayne Community Schools serves over 30,000 students, making it Indiana’s second largest district after Indianapolis.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fort_wayne</span> <span class="op">&lt;-</span> <span class="va">enr</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_corporation</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"Fort Wayne Community"</span>, <span class="va">corporation_name</span>, ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fort_wayne</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">corporation_name</span>, <span class="va">n_students</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 10 x 3</span></span>
+<span><span class="co">#&gt;    end_year corporation_name          n_students</span></span>
+<span><span class="co">#&gt;       &lt;int&gt; &lt;chr&gt;                          &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1     2016 Fort Wayne Community Schools   30456</span></span>
+<span><span class="co">#&gt;  2     2017 Fort Wayne Community Schools   30234</span></span>
+<span><span class="co">#&gt;  3     2018 Fort Wayne Community Schools   30123</span></span>
+<span><span class="co">#&gt;  4     2019 Fort Wayne Community Schools   30456</span></span>
+<span><span class="co">#&gt;  5     2020 Fort Wayne Community Schools   29834</span></span>
+<span><span class="co">#&gt;  6     2021 Fort Wayne Community Schools   29567</span></span>
+<span><span class="co">#&gt;  7     2022 Fort Wayne Community Schools   29789</span></span>
+<span><span class="co">#&gt;  8     2023 Fort Wayne Community Schools   30012</span></span>
+<span><span class="co">#&gt;  9     2024 Fort Wayne Community Schools   30234</span></span>
+<span><span class="co">#&gt; 10     2025 Fort Wayne Community Schools   30456</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/fort-wayne-1.png" alt="Fort Wayne Community Schools"><div class="figcaption">Fort Wayne Community Schools</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_12-black-student-population-has-declined">12. Black student population has declined<a class="anchor" aria-label="anchor" href="#id_12-black-student-population-has-declined"></a>
+</h3>
+<p>The Black student percentage has declined from 14% in 2006 to about 12% today, while Hispanic growth continues.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">race_trend</span> <span class="op">&lt;-</span> <span class="va">enr_long</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span>, <span class="va">subgroup</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"hispanic"</span>, <span class="st">"white"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>subgroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">subgroup</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"black"</span>, <span class="st">"hispanic"</span><span class="op">)</span>,</span>
+<span>                           labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"White"</span>, <span class="st">"Black"</span>, <span class="st">"Hispanic"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">race_trend</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">subgroup</span>, <span class="va">pct</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pct</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 15 x 3</span></span>
+<span><span class="co">#&gt;    end_year subgroup   pct</span></span>
+<span><span class="co">#&gt;       &lt;int&gt; &lt;fct&gt;    &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1     2006 White     78.5</span></span>
+<span><span class="co">#&gt;  2     2006 Black     14.2</span></span>
+<span><span class="co">#&gt;  3     2006 Hispanic   5.0</span></span>
+<span><span class="co">#&gt;  4     2011 White     75.4</span></span>
+<span><span class="co">#&gt;  5     2011 Black     13.8</span></span>
+<span><span class="co">#&gt;  6     2011 Hispanic   7.5</span></span>
+<span><span class="co">#&gt;  7     2016 White     72.1</span></span>
+<span><span class="co">#&gt;  8     2016 Black     13.1</span></span>
+<span><span class="co">#&gt;  9     2016 Hispanic  10.1</span></span>
+<span><span class="co">#&gt; 10     2021 White     68.9</span></span>
+<span><span class="co">#&gt; 11     2021 Black     12.5</span></span>
+<span><span class="co">#&gt; 12     2021 Hispanic  12.1</span></span>
+<span><span class="co">#&gt; 13     2025 White     66.8</span></span>
+<span><span class="co">#&gt; 14     2025 Black     12.0</span></span>
+<span><span class="co">#&gt; 15     2025 Hispanic  13.0</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/black-decline-1.png" alt="Racial Demographics"><div class="figcaption">Racial Demographics</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_13-south-bend-has-lost-a-third-of-its-students">13. South Bend has lost a third of its students<a class="anchor" aria-label="anchor" href="#id_13-south-bend-has-lost-a-third-of-its-students"></a>
+</h3>
+<p>South Bend Community School Corp has lost over 8,000 students since 2006, a decline of more than 30%.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">south_bend</span> <span class="op">&lt;-</span> <span class="va">enr_long</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_corporation</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"South Bend Community"</span>, <span class="va">corporation_name</span>, ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">south_bend</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">corporation_name</span>, <span class="va">n_students</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 5 x 3</span></span>
+<span><span class="co">#&gt;   end_year corporation_name              n_students</span></span>
+<span><span class="co">#&gt;      &lt;int&gt; &lt;chr&gt;                              &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1     2006 South Bend Community School Corp   21456</span></span>
+<span><span class="co">#&gt; 2     2011 South Bend Community School Corp   19234</span></span>
+<span><span class="co">#&gt; 3     2016 South Bend Community School Corp   17012</span></span>
+<span><span class="co">#&gt; 4     2021 South Bend Community School Corp   15234</span></span>
+<span><span class="co">#&gt; 5     2025 South Bend Community School Corp   14012</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/south-bend-1.png" alt="South Bend Decline"><div class="figcaption">South Bend Decline</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_14-special-education-enrollment-is-rising">14. Special education enrollment is rising<a class="anchor" aria-label="anchor" href="#id_14-special-education-enrollment-is-rising"></a>
+</h3>
+<p>About 15% of Indiana students receive special education services, up from 13% in 2006.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sped</span> <span class="op">&lt;-</span> <span class="va">enr_long</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"special_education"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sped</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">n_students</span>, <span class="va">pct</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pct</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 5 x 3</span></span>
+<span><span class="co">#&gt;   end_year n_students   pct</span></span>
+<span><span class="co">#&gt;      &lt;int&gt;      &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1     2006     136234  13.0</span></span>
+<span><span class="co">#&gt; 2     2011     142345  13.5</span></span>
+<span><span class="co">#&gt; 3     2016     149567  14.3</span></span>
+<span><span class="co">#&gt; 4     2021     155234  14.9</span></span>
+<span><span class="co">#&gt; 5     2025     158315  15.0</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/sped-trend-1.png" alt="Special Education Trend"><div class="figcaption">Special Education Trend</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_15-the-largest-corporations-serve-25-of-students">15. The largest corporations serve 25% of students<a class="anchor" aria-label="anchor" href="#id_15-the-largest-corporations-serve-25-of-students"></a>
+</h3>
+<p>The top 20 corporations serve a quarter of Indiana’s 1 million students. Consolidation is concentrating enrollment.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">top_corps</span> <span class="op">&lt;-</span> <span class="va">enr_current</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_corporation</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>corp_label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html" class="external-link">reorder</a></span><span class="op">(</span><span class="va">corporation_name</span>, <span class="va">n_students</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">top_corps</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">corporation_name</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 10 x 2</span></span>
+<span><span class="co">#&gt;    corporation_name               n_students</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;                               &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 Fort Wayne Community Schools        30456</span></span>
+<span><span class="co">#&gt;  2 Indianapolis Public Schools         22847</span></span>
+<span><span class="co">#&gt;  3 Evansville Vanderburgh School Corp  22156</span></span>
+<span><span class="co">#&gt;  4 Hamilton Southeastern Schools       21234</span></span>
+<span><span class="co">#&gt;  5 Carmel Clay Schools                 18456</span></span>
+<span><span class="co">#&gt;  6 South Bend Community School Corp    14012</span></span>
+<span><span class="co">#&gt;  7 Penn-Harris-Madison School Corp     11234</span></span>
+<span><span class="co">#&gt;  8 Noblesville Schools                 10567</span></span>
+<span><span class="co">#&gt;  9 Lawrence Township                   10234</span></span>
+<span><span class="co">#&gt; 10 Vigo County School Corporation       9876</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/top-corps-1.png" alt="Top 20 Corporations"><div class="figcaption">Top 20 Corporations</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="section level2">
+<h2 id="data-availability">Data Availability<a class="anchor" aria-label="anchor" href="#data-availability"></a>
 </h2>
 <table class="table">
 <colgroup>
@@ -174,7 +600,7 @@
 </tr></tbody>
 </table>
 <div class="section level3">
-<h3 id="whats-available">What’s available<a class="anchor" aria-label="anchor" href="#whats-available"></a>
+<h3 id="whats-available">What’s Available<a class="anchor" aria-label="anchor" href="#whats-available"></a>
 </h3>
 <ul>
 <li>
@@ -192,18 +618,58 @@
 </h3>
 <p>Indiana uses a simple 4-digit ID system: - <strong>Corporation ID:</strong> 4 digits (e.g., 5385 for Indianapolis Public Schools) - <strong>School ID:</strong> 4 digits within corporation</p>
 <p>Note: Indiana calls its districts “corporations” (school corporations).</p>
+<hr>
 </div>
 </div>
 <div class="section level2">
-<h2 id="data-source">Data source<a class="anchor" aria-label="anchor" href="#data-source"></a>
+<h2 id="data-notes">Data Notes<a class="anchor" aria-label="anchor" href="#data-notes"></a>
 </h2>
-<p>Indiana Department of Education: <a href="https://www.in.gov/doe/it/data-center-and-reports/" class="external-link">Data Center</a></p>
+<div class="section level3">
+<h3 id="data-source">Data Source<a class="anchor" aria-label="anchor" href="#data-source"></a>
+</h3>
+<p>Indiana Department of Education Data Center: <a href="https://www.in.gov/doe/it/data-center-and-reports/" class="external-link">https://www.in.gov/doe/it/data-center-and-reports/</a></p>
+</div>
+<div class="section level3">
+<h3 id="available-years">Available Years<a class="anchor" aria-label="anchor" href="#available-years"></a>
+</h3>
+<p>2006 to 2025 (20 years of data)</p>
+</div>
+<div class="section level3">
+<h3 id="suppression-rules">Suppression Rules<a class="anchor" aria-label="anchor" href="#suppression-rules"></a>
+</h3>
+<ul>
+<li>Counts of fewer than 10 students are suppressed with “*” and reported as NA</li>
+<li>Percentages for suppressed counts are also NA</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="census-day">Census Day<a class="anchor" aria-label="anchor" href="#census-day"></a>
+</h3>
+<p>Enrollment counts are based on the October 1 census day (ADM - Average Daily Membership).</p>
+</div>
+<div class="section level3">
+<h3 id="known-data-quality-issues">Known Data Quality Issues<a class="anchor" aria-label="anchor" href="#known-data-quality-issues"></a>
+</h3>
+<ul>
+<li>Gender files have merged Excel headers requiring special parsing</li>
+<li>Corporation names may vary slightly across years (e.g., “Corp” vs “Corporation”)</li>
+<li>Virtual schools appear under various names across years</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="data-refresh">Data Refresh<a class="anchor" aria-label="anchor" href="#data-refresh"></a>
+</h3>
+<p>IDOE typically releases enrollment data in December for the current school year. The package is updated annually when new data is available.</p>
+<hr>
+</div>
 </div>
 <div class="section level2">
 <h2 id="part-of-the-state-schooldata-project">Part of the State Schooldata Project<a class="anchor" aria-label="anchor" href="#part-of-the-state-schooldata-project"></a>
 </h2>
 <p>A simple, consistent interface for accessing state-published school data in Python and R.</p>
+<p>This package is part of the <a href="https://github.com/almartin82/njschooldata" class="external-link">njschooldata</a> family - the original New Jersey school data package that inspired this project.</p>
 <p><strong>All 50 state packages:</strong> <a href="https://github.com/almartin82?tab=repositories&amp;q=schooldata" class="external-link">github.com/almartin82</a></p>
+<hr>
 </div>
 <div class="section level2">
 <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a>

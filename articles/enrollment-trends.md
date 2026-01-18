@@ -278,6 +278,118 @@ ggplot(corp_counts, aes(x = end_year, y = n_corporations)) +
 
 ![](enrollment-trends_files/figure-html/rural-consolidation-1.png)
 
+## 11. Fort Wayne is the second largest district
+
+Fort Wayne Community Schools serves over 30,000 students, making it
+Indiana’s second largest district after Indianapolis.
+
+``` r
+fort_wayne <- enr %>%
+  filter(is_corporation, grepl("Fort Wayne Community", corporation_name, ignore.case = TRUE),
+         subgroup == "total_enrollment", grade_level == "TOTAL")
+
+ggplot(fort_wayne, aes(x = end_year, y = n_students)) +
+  geom_line(linewidth = 1.5, color = colors["total"]) +
+  geom_point(size = 3, color = colors["total"]) +
+  scale_y_continuous(labels = comma, limits = c(0, NA)) +
+  labs(title = "Fort Wayne Community Schools",
+       subtitle = "Indiana's second largest district - over 30,000 students",
+       x = "School Year", y = "Students") +
+  theme_readme()
+```
+
+![](enrollment-trends_files/figure-html/fort-wayne-1.png)
+
+## 12. Black student population has declined
+
+The Black student percentage has declined from 14% in 2006 to about 12%
+today, while Hispanic growth continues.
+
+``` r
+race_trend <- enr_long %>%
+  filter(is_state, grade_level == "TOTAL", subgroup %in% c("black", "hispanic", "white")) %>%
+  mutate(subgroup = factor(subgroup, levels = c("white", "black", "hispanic"),
+                           labels = c("White", "Black", "Hispanic")))
+
+ggplot(race_trend, aes(x = end_year, y = pct * 100, color = subgroup)) +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 2.5) +
+  scale_color_manual(values = c("White" = colors["white"], "Black" = colors["black"],
+                                "Hispanic" = colors["hispanic"])) +
+  labs(title = "Racial Demographics Shifting",
+       subtitle = "Black enrollment declining as Hispanic population grows",
+       x = "School Year", y = "Percent of Students", color = "") +
+  theme_readme()
+```
+
+![](enrollment-trends_files/figure-html/black-decline-1.png)
+
+## 13. South Bend has lost a third of its students
+
+South Bend Community School Corp has lost over 8,000 students since
+2006, a decline of more than 30%.
+
+``` r
+south_bend <- enr_long %>%
+  filter(is_corporation, grepl("South Bend Community", corporation_name, ignore.case = TRUE),
+         subgroup == "total_enrollment", grade_level == "TOTAL")
+
+ggplot(south_bend, aes(x = end_year, y = n_students)) +
+  geom_line(linewidth = 1.5, color = colors["total"]) +
+  geom_point(size = 3, color = colors["total"]) +
+  scale_y_continuous(labels = comma, limits = c(0, NA)) +
+  labs(title = "South Bend Community Schools",
+       subtitle = "Lost over 30% of enrollment since 2006",
+       x = "School Year", y = "Students") +
+  theme_readme()
+```
+
+![](enrollment-trends_files/figure-html/south-bend-1.png)
+
+## 14. Special education enrollment is rising
+
+About 15% of Indiana students receive special education services, up
+from 13% in 2006.
+
+``` r
+sped <- enr_long %>%
+  filter(is_state, grade_level == "TOTAL", subgroup == "special_education")
+
+ggplot(sped, aes(x = end_year, y = pct * 100)) +
+  geom_line(linewidth = 1.5, color = colors["total"]) +
+  geom_point(size = 3, color = colors["total"]) +
+  labs(title = "Special Education Enrollment Rising",
+       subtitle = "About 15% of students now receive services",
+       x = "School Year", y = "Percent of Students") +
+  theme_readme()
+```
+
+![](enrollment-trends_files/figure-html/sped-trend-1.png)
+
+## 15. The largest corporations serve 25% of students
+
+The top 20 corporations serve a quarter of Indiana’s 1 million students.
+Consolidation is concentrating enrollment.
+
+``` r
+top_corps <- enr_current %>%
+  filter(is_corporation, grade_level == "TOTAL", subgroup == "total_enrollment") %>%
+  arrange(desc(n_students)) %>%
+  head(20) %>%
+  mutate(corp_label = reorder(corporation_name, n_students))
+
+ggplot(top_corps, aes(x = corp_label, y = n_students)) +
+  geom_col(fill = colors["total"]) +
+  coord_flip() +
+  scale_y_continuous(labels = comma) +
+  labs(title = "Top 20 Corporations by Enrollment",
+       subtitle = "The largest districts serve 25% of Indiana students",
+       x = "", y = "Students") +
+  theme_readme()
+```
+
+![](enrollment-trends_files/figure-html/top-corps-1.png)
+
 ## Session Info
 
 ``` r
@@ -314,7 +426,7 @@ sessionInfo()
 #> [21] rlang_1.1.7        cachem_1.1.0       xfun_0.55          fs_1.6.6          
 #> [25] sass_0.4.10        S7_0.2.1           cli_3.6.5          pkgdown_2.2.0     
 #> [29] withr_3.0.2        magrittr_2.0.4     digest_0.6.39      grid_4.5.2        
-#> [33] rappdirs_0.3.3     lifecycle_1.0.5    vctrs_0.7.0        evaluate_1.0.5    
+#> [33] rappdirs_0.3.4     lifecycle_1.0.5    vctrs_0.7.0        evaluate_1.0.5    
 #> [37] glue_1.8.0         cellranger_1.1.0   farver_2.1.2       codetools_0.2-20  
 #> [41] ragg_1.5.0         rmarkdown_2.30     purrr_1.2.1        httr_1.4.7        
 #> [45] tools_4.5.2        pkgconfig_2.0.3    htmltools_0.5.9
