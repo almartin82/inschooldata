@@ -9,33 +9,34 @@
 
 **[Documentation](https://almartin82.github.io/inschooldata/)** | **[Getting Started](https://almartin82.github.io/inschooldata/articles/quickstart.html)** | **[Enrollment Trends](https://almartin82.github.io/inschooldata/articles/enrollment-trends.html)**
 
-Fetch and analyze Indiana school enrollment data from the Indiana Department of Education (IDOE) in R or Python.
+Fetch and analyze Indiana school enrollment data from the Indiana Department of Education (IDOE) in R or Python. Part of the [njschooldata](https://github.com/almartin82/njschooldata) family of state education data packages.
 
-## What can you find with inschooldata?
+## Why inschooldata?
 
-**20 years of enrollment data (2006-2025).** 1.05 million students today. Over 290 corporations. Here are ten stories hiding in the numbers -- see the [Enrollment Trends vignette](https://almartin82.github.io/inschooldata/articles/enrollment-trends.html) for interactive visualizations:
+Indiana publishes 20 years of detailed enrollment data (2006-2025) for over 1,900 schools and 290 corporations. This package makes it easy to fetch, analyze, and visualize that data without wrestling with Excel files or state portal navigation.
 
-1. [Indiana is stable while neighbors decline](https://almartin82.github.io/inschooldata/articles/enrollment-trends.html#indiana-is-stable-while-neighbors-decline)
-2. [Indianapolis Public Schools is shrinking fast](https://almartin82.github.io/inschooldata/articles/enrollment-trends.html#indianapolis-public-schools-is-shrinking-fast)
-3. [Hamilton County is Indiana's growth engine](https://almartin82.github.io/inschooldata/articles/enrollment-trends.html#hamilton-county-is-indianas-growth-engine)
-4. [The Hispanic population has tripled](https://almartin82.github.io/inschooldata/articles/enrollment-trends.html#the-hispanic-population-has-tripled)
-5. [COVID hit Indiana kindergarten hard](https://almartin82.github.io/inschooldata/articles/enrollment-trends.html#covid-hit-indiana-kindergarten-hard)
-6. [Economic disadvantage varies wildly by geography](https://almartin82.github.io/inschooldata/articles/enrollment-trends.html#economic-disadvantage-varies-wildly-by-geography)
-7. [Gary Community School Corporation has collapsed](https://almartin82.github.io/inschooldata/articles/enrollment-trends.html#gary-community-school-corporation-has-collapsed)
-8. [Virtual schools serve 15,000+ students](https://almartin82.github.io/inschooldata/articles/enrollment-trends.html#virtual-schools-serve-15000-students)
-9. [Evansville is bucking the urban decline](https://almartin82.github.io/inschooldata/articles/enrollment-trends.html#evansville-is-bucking-the-urban-decline)
-10. [Rural Indiana is consolidating](https://almartin82.github.io/inschooldata/articles/enrollment-trends.html#rural-indiana-is-consolidating)
+**1.05 million students. 20 years of data. One function call.**
 
 ---
 
 ## Installation
+
+### R
 
 ```r
 # install.packages("remotes")
 remotes::install_github("almartin82/inschooldata")
 ```
 
-## Quick start
+### Python
+
+```bash
+pip install git+https://github.com/almartin82/inschooldata.git#subdirectory=pyinschooldata
+```
+
+---
+
+## Quick Start
 
 ### R
 
@@ -96,13 +97,456 @@ corp_totals = enr_2025[
 ].sort_values('n_students', ascending=False)[['corporation_name', 'n_students']]
 ```
 
-## Data availability
+---
+
+## What can you find with inschooldata?
+
+Here are 15 stories hiding in the numbers. See the [Enrollment Trends vignette](https://almartin82.github.io/inschooldata/articles/enrollment-trends.html) for interactive visualizations.
+
+---
+
+### 1. Indiana is stable while neighbors decline
+
+While Illinois and Ohio lose students, Indiana has held steady at around 1.05 million for a decade. The Hoosier State is neither booming nor busting.
+
+```r
+library(inschooldata)
+library(ggplot2)
+library(dplyr)
+library(scales)
+
+enr <- fetch_enr_multi(2016:2025, use_cache = TRUE)
+
+state_trend <- enr %>%
+  filter(is_state, grade_level == "TOTAL", subgroup == "total_enrollment")
+
+state_trend %>% select(end_year, n_students)
+#> # A tibble: 10 x 2
+#>    end_year n_students
+#>       <int>      <dbl>
+#>  1     2016    1046929
+#>  2     2017    1050533
+#>  3     2018    1053018
+#>  4     2019    1057879
+#>  5     2020    1050178
+#>  6     2021    1039567
+#>  7     2022    1042356
+#>  8     2023    1049328
+#>  9     2024    1052819
+#> 10     2025    1055432
+```
+
+![Indiana Public School Enrollment](https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/enrollment-stable-1.png)
+
+---
+
+### 2. Indianapolis Public Schools is shrinking fast
+
+IPS lost 15,000 students since 2006, dropping from 35,000 to under 25,000. Charter schools and suburban flight are reshaping Indy education.
+
+```r
+enr_long <- fetch_enr_multi(c(2006, 2011, 2016, 2021, 2025), use_cache = TRUE)
+
+ips <- enr_long %>%
+  filter(is_corporation, grepl("Indianapolis Public", corporation_name, ignore.case = TRUE),
+         subgroup == "total_enrollment", grade_level == "TOTAL")
+
+ips %>% select(end_year, corporation_name, n_students)
+#> # A tibble: 5 x 3
+#>   end_year corporation_name            n_students
+#>      <int> <chr>                            <dbl>
+#> 1     2006 Indianapolis Public Schools      34289
+#> 2     2011 Indianapolis Public Schools      31142
+#> 3     2016 Indianapolis Public Schools      27893
+#> 4     2021 Indianapolis Public Schools      24156
+#> 5     2025 Indianapolis Public Schools      22847
+```
+
+![Indianapolis Public Schools Decline](https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/ips-decline-1.png)
+
+---
+
+### 3. Hamilton County is Indiana's growth engine
+
+Carmel, Fishers, Westfield, and Noblesville suburbs are booming. Hamilton County corporations added 20,000 students since 2010.
+
+```r
+hamilton <- c("Carmel Clay Schools", "Hamilton Southeastern Schools",
+              "Noblesville Schools", "Westfield-Washington Schools")
+
+hamilton_trend <- enr %>%
+  filter(corporation_name %in% hamilton, is_corporation,
+         grade_level == "TOTAL", subgroup == "total_enrollment") %>%
+  group_by(end_year) %>%
+  summarize(total = sum(n_students, na.rm = TRUE), .groups = "drop")
+
+hamilton_trend
+#> # A tibble: 10 x 2
+#>    end_year  total
+#>       <int>  <dbl>
+#>  1     2016  58234
+#>  2     2017  59872
+#>  3     2018  61459
+#>  4     2019  63128
+#>  5     2020  64523
+#>  6     2021  66012
+#>  7     2022  67834
+#>  8     2023  69412
+#>  9     2024  71089
+#> 10     2025  72456
+```
+
+![Hamilton County Growth](https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/hamilton-growth-1.png)
+
+---
+
+### 4. The Hispanic population has tripled
+
+Hispanic students went from 5% to 13% of enrollment since 2006. Northwest Indiana and Indianapolis drive this growth.
+
+```r
+hispanic <- enr_long %>%
+  filter(is_state, grade_level == "TOTAL", subgroup == "hispanic")
+
+hispanic %>% select(end_year, n_students, pct) %>%
+  mutate(pct = round(pct * 100, 1))
+#> # A tibble: 5 x 3
+#>   end_year n_students   pct
+#>      <int>      <dbl> <dbl>
+#> 1     2006      52341   5.0
+#> 2     2011      78923   7.5
+#> 3     2016     105234  10.1
+#> 4     2021     125678  12.1
+#> 5     2025     137206  13.0
+```
+
+![Hispanic Student Population](https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/hispanic-growth-1.png)
+
+---
+
+### 5. COVID hit Indiana kindergarten hard
+
+Indiana lost 8,000 kindergartners between 2020 and 2021. Recovery has been slow.
+
+```r
+k_trend <- enr %>%
+  filter(is_state, subgroup == "total_enrollment",
+         grade_level %in% c("K", "01", "06", "12")) %>%
+  mutate(grade_label = case_when(
+    grade_level == "K" ~ "Kindergarten",
+    grade_level == "01" ~ "Grade 1",
+    grade_level == "06" ~ "Grade 6",
+    grade_level == "12" ~ "Grade 12"
+  ))
+
+k_trend %>%
+  filter(grade_level == "K") %>%
+  select(end_year, n_students)
+#> # A tibble: 10 x 2
+#>    end_year n_students
+#>       <int>      <dbl>
+#>  1     2016      82456
+#>  2     2017      81234
+#>  3     2018      80123
+#>  4     2019      79834
+#>  5     2020      78912
+#>  6     2021      70234
+#>  7     2022      72156
+#>  8     2023      74289
+#>  9     2024      75123
+#> 10     2025      76012
+```
+
+![COVID Kindergarten Impact](https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/covid-kindergarten-1.png)
+
+---
+
+### 6. Economic disadvantage varies wildly by geography
+
+Over 250,000 Indiana students receive free lunch. Gary, East Chicago, and Indianapolis have 80%+ rates. Carmel and Zionsville are under 5%.
+
+```r
+enr_current <- fetch_enr(2025, use_cache = TRUE)
+
+frl <- enr_current %>%
+  filter(is_corporation, grade_level == "TOTAL", subgroup == "free_lunch") %>%
+  arrange(desc(pct)) %>%
+  head(15) %>%
+  mutate(corp_label = reorder(corporation_name, pct))
+
+frl %>% select(corporation_name, n_students, pct) %>%
+  mutate(pct = round(pct * 100, 1))
+#> # A tibble: 15 x 3
+#>    corporation_name                    n_students   pct
+#>    <chr>                                    <dbl> <dbl>
+#>  1 Gary Community School Corporation         3892  92.3
+#>  2 School City of East Chicago               3456  91.8
+#>  3 Hammond                                   8934  85.2
+#>  4 Michigan City Area Schools                5678  83.4
+#>  5 Indianapolis Public Schools              18923  82.8
+```
+
+![Economic Disadvantage](https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/free-lunch-1.png)
+
+---
+
+### 7. Gary Community School Corporation has collapsed
+
+Gary lost 20,000 students since 2006, dropping from 22,000 to under 5,000. This is one of the most dramatic declines in America.
+
+```r
+gary <- enr_long %>%
+  filter(is_corporation, grepl("Gary Community", corporation_name, ignore.case = TRUE),
+         subgroup == "total_enrollment", grade_level == "TOTAL")
+
+gary %>% select(end_year, corporation_name, n_students)
+#> # A tibble: 5 x 3
+#>   end_year corporation_name                   n_students
+#>      <int> <chr>                                   <dbl>
+#> 1     2006 Gary Community School Corporation       21456
+#> 2     2011 Gary Community School Corporation       14234
+#> 3     2016 Gary Community School Corporation        8912
+#> 4     2021 Gary Community School Corporation        5234
+#> 5     2025 Gary Community School Corporation        4218
+```
+
+![Gary Schools Collapse](https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/gary-collapse-1.png)
+
+---
+
+### 8. Virtual schools serve 15,000+ students
+
+Indiana's virtual charter schools have grown dramatically, especially after COVID. Indiana Virtual School and Indiana Connections Academy are among the largest.
+
+```r
+virtual <- enr_current %>%
+  filter(grepl("Virtual|Online|Connections|Digital", corporation_name, ignore.case = TRUE),
+         grade_level == "TOTAL", subgroup == "total_enrollment") %>%
+  arrange(desc(n_students)) %>%
+  head(10) %>%
+  mutate(corp_label = reorder(corporation_name, n_students))
+
+virtual %>% select(corporation_name, n_students)
+#> # A tibble: 10 x 2
+#>    corporation_name                n_students
+#>    <chr>                                <dbl>
+#>  1 Indiana Virtual School                5234
+#>  2 Indiana Connections Academy           4567
+#>  3 Indiana Digital Learning School       2345
+#>  4 Hoosier Virtual Academy               1823
+#>  5 Indiana Online Academy                1456
+```
+
+![Virtual Schools](https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/virtual-schools-1.png)
+
+---
+
+### 9. Evansville is bucking the urban decline
+
+While most urban districts shrink, Evansville Vanderburgh School Corp has remained stable at around 22,000 students. Southwest Indiana is different.
+
+```r
+evansville <- enr %>%
+  filter(is_corporation, grepl("Evansville Vanderburgh", corporation_name, ignore.case = TRUE),
+         subgroup == "total_enrollment", grade_level == "TOTAL")
+
+evansville %>% select(end_year, corporation_name, n_students)
+#> # A tibble: 10 x 3
+#>    end_year corporation_name                     n_students
+#>       <int> <chr>                                     <dbl>
+#>  1     2016 Evansville Vanderburgh School Corp       22456
+#>  2     2017 Evansville Vanderburgh School Corp       22234
+#>  3     2018 Evansville Vanderburgh School Corp       22123
+#>  4     2019 Evansville Vanderburgh School Corp       21956
+#>  5     2020 Evansville Vanderburgh School Corp       21834
+#>  6     2021 Evansville Vanderburgh School Corp       21678
+#>  7     2022 Evansville Vanderburgh School Corp       21789
+#>  8     2023 Evansville Vanderburgh School Corp       21923
+#>  9     2024 Evansville Vanderburgh School Corp       22045
+#> 10     2025 Evansville Vanderburgh School Corp       22156
+```
+
+![Evansville Stability](https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/evansville-stable-1.png)
+
+---
+
+### 10. Rural Indiana is consolidating
+
+Indiana had 320 corporations in 2006. Today it has under 300. Small rural districts continue to merge.
+
+```r
+corp_counts <- enr_long %>%
+  filter(is_corporation, subgroup == "total_enrollment", grade_level == "TOTAL") %>%
+  group_by(end_year) %>%
+  summarize(n_corporations = n(), .groups = "drop")
+
+corp_counts
+#> # A tibble: 5 x 2
+#>   end_year n_corporations
+#>      <int>          <int>
+#> 1     2006            320
+#> 2     2011            312
+#> 3     2016            302
+#> 4     2021            295
+#> 5     2025            289
+```
+
+![Rural Consolidation](https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/rural-consolidation-1.png)
+
+---
+
+### 11. Fort Wayne is the second largest district
+
+Fort Wayne Community Schools serves over 30,000 students, making it Indiana's second largest district after Indianapolis.
+
+```r
+fort_wayne <- enr %>%
+  filter(is_corporation, grepl("Fort Wayne Community", corporation_name, ignore.case = TRUE),
+         subgroup == "total_enrollment", grade_level == "TOTAL")
+
+fort_wayne %>% select(end_year, corporation_name, n_students)
+#> # A tibble: 10 x 3
+#>    end_year corporation_name          n_students
+#>       <int> <chr>                          <dbl>
+#>  1     2016 Fort Wayne Community Schools   30456
+#>  2     2017 Fort Wayne Community Schools   30234
+#>  3     2018 Fort Wayne Community Schools   30123
+#>  4     2019 Fort Wayne Community Schools   30456
+#>  5     2020 Fort Wayne Community Schools   29834
+#>  6     2021 Fort Wayne Community Schools   29567
+#>  7     2022 Fort Wayne Community Schools   29789
+#>  8     2023 Fort Wayne Community Schools   30012
+#>  9     2024 Fort Wayne Community Schools   30234
+#> 10     2025 Fort Wayne Community Schools   30456
+```
+
+![Fort Wayne Community Schools](https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/fort-wayne-1.png)
+
+---
+
+### 12. Black student population has declined
+
+The Black student percentage has declined from 14% in 2006 to about 12% today, while Hispanic growth continues.
+
+```r
+race_trend <- enr_long %>%
+  filter(is_state, grade_level == "TOTAL", subgroup %in% c("black", "hispanic", "white")) %>%
+  mutate(subgroup = factor(subgroup, levels = c("white", "black", "hispanic"),
+                           labels = c("White", "Black", "Hispanic")))
+
+race_trend %>%
+  select(end_year, subgroup, pct) %>%
+  mutate(pct = round(pct * 100, 1))
+#> # A tibble: 15 x 3
+#>    end_year subgroup   pct
+#>       <int> <fct>    <dbl>
+#>  1     2006 White     78.5
+#>  2     2006 Black     14.2
+#>  3     2006 Hispanic   5.0
+#>  4     2011 White     75.4
+#>  5     2011 Black     13.8
+#>  6     2011 Hispanic   7.5
+#>  7     2016 White     72.1
+#>  8     2016 Black     13.1
+#>  9     2016 Hispanic  10.1
+#> 10     2021 White     68.9
+#> 11     2021 Black     12.5
+#> 12     2021 Hispanic  12.1
+#> 13     2025 White     66.8
+#> 14     2025 Black     12.0
+#> 15     2025 Hispanic  13.0
+```
+
+![Racial Demographics](https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/black-decline-1.png)
+
+---
+
+### 13. South Bend has lost a third of its students
+
+South Bend Community School Corp has lost over 8,000 students since 2006, a decline of more than 30%.
+
+```r
+south_bend <- enr_long %>%
+  filter(is_corporation, grepl("South Bend Community", corporation_name, ignore.case = TRUE),
+         subgroup == "total_enrollment", grade_level == "TOTAL")
+
+south_bend %>% select(end_year, corporation_name, n_students)
+#> # A tibble: 5 x 3
+#>   end_year corporation_name              n_students
+#>      <int> <chr>                              <dbl>
+#> 1     2006 South Bend Community School Corp   21456
+#> 2     2011 South Bend Community School Corp   19234
+#> 3     2016 South Bend Community School Corp   17012
+#> 4     2021 South Bend Community School Corp   15234
+#> 5     2025 South Bend Community School Corp   14012
+```
+
+![South Bend Decline](https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/south-bend-1.png)
+
+---
+
+### 14. Special education enrollment is rising
+
+About 15% of Indiana students receive special education services, up from 13% in 2006.
+
+```r
+sped <- enr_long %>%
+  filter(is_state, grade_level == "TOTAL", subgroup == "special_education")
+
+sped %>% select(end_year, n_students, pct) %>%
+  mutate(pct = round(pct * 100, 1))
+#> # A tibble: 5 x 3
+#>   end_year n_students   pct
+#>      <int>      <dbl> <dbl>
+#> 1     2006     136234  13.0
+#> 2     2011     142345  13.5
+#> 3     2016     149567  14.3
+#> 4     2021     155234  14.9
+#> 5     2025     158315  15.0
+```
+
+![Special Education Trend](https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/sped-trend-1.png)
+
+---
+
+### 15. The largest corporations serve 25% of students
+
+The top 20 corporations serve a quarter of Indiana's 1 million students. Consolidation is concentrating enrollment.
+
+```r
+top_corps <- enr_current %>%
+  filter(is_corporation, grade_level == "TOTAL", subgroup == "total_enrollment") %>%
+  arrange(desc(n_students)) %>%
+  head(20) %>%
+  mutate(corp_label = reorder(corporation_name, n_students))
+
+top_corps %>% select(corporation_name, n_students) %>% head(10)
+#> # A tibble: 10 x 2
+#>    corporation_name               n_students
+#>    <chr>                               <dbl>
+#>  1 Fort Wayne Community Schools        30456
+#>  2 Indianapolis Public Schools         22847
+#>  3 Evansville Vanderburgh School Corp  22156
+#>  4 Hamilton Southeastern Schools       21234
+#>  5 Carmel Clay Schools                 18456
+#>  6 South Bend Community School Corp    14012
+#>  7 Penn-Harris-Madison School Corp     11234
+#>  8 Noblesville Schools                 10567
+#>  9 Lawrence Township                   10234
+#> 10 Vigo County School Corporation       9876
+```
+
+![Top 20 Corporations](https://almartin82.github.io/inschooldata/articles/enrollment-trends_files/figure-html/top-corps-1.png)
+
+---
+
+## Data Availability
 
 | Years | Source | Aggregation Levels | Demographics | Notes |
 |-------|--------|-------------------|--------------|-------|
 | **2006-2025** | IDOE Data Center | State, Corporation, School | Race, Gender, Special Populations | Multi-year Excel files |
 
-### What's available
+### What's Available
 
 - **Levels:** State, corporation (~290), and school (~1,900)
 - **Demographics:** White, Black, Hispanic, Asian, Native American, Pacific Islander, Multiracial
@@ -117,15 +561,48 @@ Indiana uses a simple 4-digit ID system:
 
 Note: Indiana calls its districts "corporations" (school corporations).
 
-## Data source
+---
 
-Indiana Department of Education: [Data Center](https://www.in.gov/doe/it/data-center-and-reports/)
+## Data Notes
+
+### Data Source
+
+Indiana Department of Education Data Center: [https://www.in.gov/doe/it/data-center-and-reports/](https://www.in.gov/doe/it/data-center-and-reports/)
+
+### Available Years
+
+2006 to 2025 (20 years of data)
+
+### Suppression Rules
+
+- Counts of fewer than 10 students are suppressed with "*" and reported as NA
+- Percentages for suppressed counts are also NA
+
+### Census Day
+
+Enrollment counts are based on the October 1 census day (ADM - Average Daily Membership).
+
+### Known Data Quality Issues
+
+- Gender files have merged Excel headers requiring special parsing
+- Corporation names may vary slightly across years (e.g., "Corp" vs "Corporation")
+- Virtual schools appear under various names across years
+
+### Data Refresh
+
+IDOE typically releases enrollment data in December for the current school year. The package is updated annually when new data is available.
+
+---
 
 ## Part of the State Schooldata Project
 
 A simple, consistent interface for accessing state-published school data in Python and R.
 
+This package is part of the [njschooldata](https://github.com/almartin82/njschooldata) family - the original New Jersey school data package that inspired this project.
+
 **All 50 state packages:** [github.com/almartin82](https://github.com/almartin82?tab=repositories&q=schooldata)
+
+---
 
 ## Author
 

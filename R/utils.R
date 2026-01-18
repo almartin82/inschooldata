@@ -136,20 +136,17 @@ clean_school_name <- function(x) {
 standardize_corp_id <- function(x) {
   if (is.null(x)) return(NA_character_)
 
-  # Convert to character
-  x <- as.character(x)
+  # Convert to character and clean
+  x <- trimws(as.character(x))
 
-  # Remove any whitespace
-
-  x <- trimws(x)
-
-  # Pad with leading zeros to 4 digits
-  x <- sprintf("%04s", x)
+  # Convert to numeric and pad with leading zeros
+  numeric_x <- suppressWarnings(as.integer(x))
+  result <- sprintf("%04d", numeric_x)
 
   # Replace malformed entries with NA
-  x[!grepl("^[0-9]{4}$", x)] <- NA_character_
+  result[is.na(numeric_x) | numeric_x < 0 | numeric_x > 9999] <- NA_character_
 
-  x
+  result
 }
 
 
@@ -163,17 +160,15 @@ standardize_corp_id <- function(x) {
 standardize_school_id <- function(x) {
   if (is.null(x)) return(NA_character_)
 
-  # Convert to character
-  x <- as.character(x)
+  # Convert to character and clean
+  x <- trimws(as.character(x))
 
-  # Remove any whitespace
-  x <- trimws(x)
-
-  # Pad with leading zeros to 4 digits
-  x <- sprintf("%04s", x)
+  # Convert to numeric and pad with leading zeros
+  numeric_x <- suppressWarnings(as.integer(x))
+  result <- sprintf("%04d", numeric_x)
 
   # Replace malformed entries with NA
-  x[!grepl("^[0-9]{4}$", x)] <- NA_character_
+  result[is.na(numeric_x) | numeric_x < 0 | numeric_x > 9999] <- NA_character_
 
-  x
+  result
 }
