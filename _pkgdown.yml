@@ -1,5 +1,14 @@
 url: https://almartin82.github.io/inschooldata/
 
+articles:
+  - title: internal
+    navbar: ~
+    contents:
+    - CLAUDE
+    - EXPANSION
+    - ASSESSMENT_STATUS
+    - TODO
+
 authors:
   Andy Martin:
     href: https://github.com/almartin82

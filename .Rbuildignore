@@ -10,5 +10,7 @@
 ^doc$
 ^Meta$
 ^CLAUDE\.md$
+^EXPANSION\.md$
+^ASSESSMENT_STATUS\.md$
 ^py.*schooldata$
 ^vignettes/.*_cache$
