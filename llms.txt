@@ -725,6 +725,25 @@ Transform data into analysis-ready formats
 - [`enr_grade_aggs()`](https://almartin82.github.io/inschooldata/reference/enr_grade_aggs.md)
   : Custom Enrollment Grade Level Aggregates
 
+## Assessment Data
+
+Download and process assessment data from IDOE
+
+- [`fetch_assessment()`](https://almartin82.github.io/inschooldata/reference/fetch_assessment.md)
+  : Fetch Indiana assessment data
+- [`fetch_assessment_multi()`](https://almartin82.github.io/inschooldata/reference/fetch_assessment_multi.md)
+  : Fetch assessment data for multiple years
+- [`fetch_corporation_assessment()`](https://almartin82.github.io/inschooldata/reference/fetch_corporation_assessment.md)
+  : Get assessment data for a specific corporation
+- [`fetch_school_assessment()`](https://almartin82.github.io/inschooldata/reference/fetch_school_assessment.md)
+  : Get assessment data for a specific school
+- [`get_available_assessment_years()`](https://almartin82.github.io/inschooldata/reference/get_available_assessment_years.md)
+  : Get available assessment years
+- [`tidy_assessment()`](https://almartin82.github.io/inschooldata/reference/tidy_assessment.md)
+  : Tidy assessment data
+- [`id_assessment_aggs()`](https://almartin82.github.io/inschooldata/reference/id_assessment_aggs.md)
+  : Add aggregation flags to assessment data
+
 ## Cache Management
 
 Manage locally cached data
@@ -740,3 +759,5 @@ Manage locally cached data
 
 - [Indiana Enrollment
   Trends](https://almartin82.github.io/inschooldata/articles/enrollment-trends.md):
+- [Indiana Assessment
+  Trends](https://almartin82.github.io/inschooldata/articles/indiana-assessment.md):
