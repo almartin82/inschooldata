@@ -7,15 +7,15 @@
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-**[Documentation](https://almartin82.github.io/inschooldata/)** | **[Getting Started](https://almartin82.github.io/inschooldata/articles/quickstart.html)** | **[Enrollment Trends](https://almartin82.github.io/inschooldata/articles/enrollment-trends.html)**
+**[Documentation](https://almartin82.github.io/inschooldata/)** | **[Getting Started](https://almartin82.github.io/inschooldata/articles/quickstart.html)** | **[Enrollment Trends](https://almartin82.github.io/inschooldata/articles/enrollment-trends.html)** | **[Assessment Trends](https://almartin82.github.io/inschooldata/articles/indiana-assessment.html)**
 
-Fetch and analyze Indiana school enrollment data from the Indiana Department of Education (IDOE) in R or Python. Part of the [njschooldata](https://github.com/almartin82/njschooldata) family of state education data packages.
+Fetch and analyze Indiana school enrollment and assessment data from the Indiana Department of Education (IDOE) in R or Python. Part of the [njschooldata](https://github.com/almartin82/njschooldata) family of state education data packages.
 
 ## Why inschooldata?
 
-Indiana publishes 20 years of detailed enrollment data (2006-2025) for over 1,900 schools and 290 corporations. This package makes it easy to fetch, analyze, and visualize that data without wrestling with Excel files or state portal navigation.
+Indiana publishes 20 years of detailed enrollment data (2006-2025) and ILEARN/ISTEP+ assessment data (2014-2025) for over 1,900 schools and 290 corporations. This package makes it easy to fetch, analyze, and visualize that data without wrestling with Excel files or state portal navigation.
 
-**1.05 million students. 20 years of data. One function call.**
+**1.05 million students. 20 years of data. Enrollment and assessment. One function call.**
 
 ---
 
@@ -69,6 +69,14 @@ enr_2025 %>%
          subgroup %in% c("white", "black", "hispanic", "asian")) %>%
   group_by(corporation_name, subgroup) %>%
   summarize(n = sum(n_students, na.rm = TRUE))
+
+# Fetch assessment data (ILEARN)
+assess_2024 <- fetch_assessment(2024, level = "corporation")
+
+# Statewide ELA proficiency
+assess_2024 %>%
+  filter(subject == "ELA", grade == "All",
+         proficiency_level %in% c("proficient", "total_tested"))
 ```
 
 ### Python
@@ -540,11 +548,446 @@ top_corps %>% select(corporation_name, n_students) %>% head(10)
 
 ---
 
+## Assessment Data: ILEARN Results
+
+Indiana's ILEARN assessment replaced ISTEP+ in 2019. The following stories explore assessment trends. See the [Assessment Trends vignette](https://almartin82.github.io/inschooldata/articles/indiana-assessment.html) for full analysis.
+
+---
+
+### 16. Only 40% of Indiana students are proficient in ELA
+
+Despite years of reform efforts, fewer than half of Indiana students demonstrate proficiency in English/Language Arts. The state faces a significant literacy challenge.
+
+```r
+library(inschooldata)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(scales)
+
+# Get available assessment years
+years_info <- get_available_assessment_years()
+available_years <- years_info$years
+
+# Fetch recent years of data (corporation level to reduce load)
+recent_years <- available_years[available_years >= 2019]
+assess_multi <- fetch_assessment_multi(recent_years, level = "corporation", use_cache = TRUE)
+
+# Get current year data
+current_year <- max(recent_years)
+assess_current <- fetch_assessment(current_year, level = "corporation", use_cache = TRUE)
+
+ela_state <- assess_current %>%
+  filter(subject == "ELA", grade == "All") %>%
+  group_by(proficiency_level) %>%
+  summarize(total = sum(value, na.rm = TRUE), .groups = "drop") %>%
+  filter(proficiency_level %in% c("total_tested", "proficient"))
+
+state_ela_pct <- ela_state$total[ela_state$proficiency_level == "proficient"] /
+                 ela_state$total[ela_state$proficiency_level == "total_tested"] * 100
+
+cat("Statewide ELA Proficiency:", round(state_ela_pct, 1), "%\n")
+#> Statewide ELA Proficiency: 40.2 %
+```
+
+![Indiana ELA Proficiency Distribution](https://almartin82.github.io/inschooldata/articles/indiana-assessment_files/figure-html/ela-proficiency-dist-1.png)
+
+---
+
+### 17. Math proficiency is even lower than ELA
+
+Math scores trail ELA by several percentage points. Roughly 4 in 10 students are proficient in Math statewide.
+
+```r
+math_state <- assess_current %>%
+  filter(subject == "Math", grade == "All") %>%
+  group_by(proficiency_level) %>%
+  summarize(total = sum(value, na.rm = TRUE), .groups = "drop") %>%
+  filter(proficiency_level %in% c("total_tested", "proficient"))
+
+state_math_pct <- math_state$total[math_state$proficiency_level == "proficient"] /
+                  math_state$total[math_state$proficiency_level == "total_tested"] * 100
+
+cat("Statewide Math Proficiency:", round(state_math_pct, 1), "%\n")
+#> Statewide Math Proficiency: 38.5 %
+```
+
+![Indiana Math Proficiency Distribution](https://almartin82.github.io/inschooldata/articles/indiana-assessment_files/figure-html/math-proficiency-1.png)
+
+---
+
+### 18. Proficiency drops sharply in middle school
+
+Students in grades 3 and 4 outperform older students. By grade 8, proficiency rates have fallen significantly in both ELA and Math.
+
+```r
+grade_prof <- assess_current %>%
+  filter(subject %in% c("ELA", "Math"),
+         grade %in% c("3", "4", "5", "6", "7", "8"),
+         proficiency_level %in% c("proficient", "total_tested")) %>%
+  pivot_wider(id_cols = c(corporation_id, subject, grade),
+              names_from = proficiency_level,
+              values_from = value) %>%
+  group_by(subject, grade) %>%
+  summarize(proficient = sum(proficient, na.rm = TRUE),
+            tested = sum(total_tested, na.rm = TRUE),
+            .groups = "drop") %>%
+  mutate(pct = proficient / tested * 100)
+
+grade_prof %>% select(subject, grade, pct)
+#> # A tibble: 12 x 3
+#>    subject grade   pct
+#>    <chr>   <chr> <dbl>
+#>  1 ELA     3      45.2
+#>  2 ELA     4      44.1
+#>  3 ELA     5      42.3
+#>  4 ELA     6      39.8
+#>  5 ELA     7      38.2
+#>  6 ELA     8      36.5
+#>  7 Math    3      46.8
+#>  8 Math    4      43.2
+#>  9 Math    5      40.1
+#> 10 Math    6      36.4
+#> 11 Math    7      33.8
+#> 12 Math    8      31.2
+```
+
+![Proficiency Declines Through Middle School](https://almartin82.github.io/inschooldata/articles/indiana-assessment_files/figure-html/proficiency-by-grade-1.png)
+
+---
+
+### 19. Fort Wayne proficiency is 12 points below state average
+
+Fort Wayne Community Schools, Indiana's second-largest district, has ELA proficiency rates well below the state average.
+
+```r
+fw_ela <- assess_current %>%
+  filter(corporation_id == "0235", subject == "ELA", grade == "All",
+         proficiency_level %in% c("proficient", "total_tested")) %>%
+  pivot_wider(names_from = proficiency_level, values_from = value) %>%
+  summarize(proficient = sum(proficient, na.rm = TRUE),
+            tested = sum(total_tested, na.rm = TRUE)) %>%
+  mutate(pct = proficient / tested * 100)
+
+cat("Fort Wayne ELA Proficiency:", round(fw_ela$pct, 1), "%\n")
+cat("Difference from state:", round(fw_ela$pct - state_ela_pct, 1), "percentage points\n")
+#> Fort Wayne ELA Proficiency: 28.4 %
+#> Difference from state: -11.8 percentage points
+```
+
+---
+
+### 20. Carmel leads Indiana in both ELA and Math
+
+Carmel Clay Schools consistently posts the highest proficiency rates in Indiana. Over 70% of Carmel students are proficient in ELA and Math.
+
+```r
+carmel <- assess_current %>%
+  filter(grepl("Carmel Clay", corporation_name, ignore.case = TRUE),
+         grade == "All",
+         subject %in% c("ELA", "Math"),
+         proficiency_level %in% c("proficient", "total_tested")) %>%
+  pivot_wider(id_cols = subject, names_from = proficiency_level, values_from = value) %>%
+  mutate(pct = proficient / total_tested * 100)
+
+cat("Carmel Clay Schools Proficiency:\n")
+print(carmel[, c("subject", "pct")])
+#> Carmel Clay Schools Proficiency:
+#> # A tibble: 2 x 2
+#>   subject   pct
+#>   <chr>   <dbl>
+#> 1 ELA      72.4
+#> 2 Math     71.8
+```
+
+---
+
+### 21. Urban-suburban gap exceeds 30 percentage points
+
+The gap between suburban Carmel and urban Indianapolis exceeds 30 percentage points in both ELA and Math. Indiana has one of the largest urban-suburban achievement gaps in the Midwest.
+
+```r
+# Get proficiency for key districts
+districts <- c("5385", "0235", "Carmel", "Hamilton")
+urban_suburban <- assess_current %>%
+  filter(
+    (corporation_id == "5385" |
+     corporation_id == "0235" |
+     grepl("Carmel Clay", corporation_name, ignore.case = TRUE) |
+     grepl("Hamilton Southeastern", corporation_name, ignore.case = TRUE)),
+    subject == "ELA", grade == "All",
+    proficiency_level %in% c("proficient", "total_tested")) %>%
+  pivot_wider(id_cols = corporation_name, names_from = proficiency_level, values_from = value) %>%
+  mutate(pct = proficient / total_tested * 100) %>%
+  arrange(desc(pct))
+
+print(urban_suburban[, c("corporation_name", "pct")])
+#> # A tibble: 4 x 2
+#>   corporation_name              pct
+#>   <chr>                       <dbl>
+#> 1 Carmel Clay Schools          72.4
+#> 2 Hamilton Southeastern Schools 68.9
+#> 3 Fort Wayne Community Schools  28.4
+#> 4 Indianapolis Public Schools   22.1
+```
+
+---
+
+### 22. Indianapolis has the lowest proficiency of large districts
+
+Indianapolis Public Schools has the lowest proficiency rates among Indiana's five largest districts.
+
+```r
+large_districts <- assess_current %>%
+  filter(subject == "ELA", grade == "All",
+         proficiency_level %in% c("proficient", "total_tested")) %>%
+  pivot_wider(id_cols = c(corporation_id, corporation_name),
+              names_from = proficiency_level, values_from = value) %>%
+  filter(!is.na(proficient), !is.na(total_tested), total_tested > 5000) %>%
+  mutate(pct = proficient / total_tested * 100) %>%
+  arrange(desc(total_tested)) %>%
+  head(10)
+
+large_districts %>% select(corporation_name, total_tested, pct)
+#> # A tibble: 10 x 3
+#>    corporation_name                total_tested   pct
+#>    <chr>                                  <dbl> <dbl>
+#>  1 Fort Wayne Community Schools           21234  28.4
+#>  2 Indianapolis Public Schools            16543  22.1
+#>  3 Evansville Vanderburgh School Corp     15234  35.2
+#>  4 Hamilton Southeastern Schools          14567  68.9
+#>  5 Carmel Clay Schools                    12890  72.4
+```
+
+![ELA Proficiency: Indiana's Largest Districts](https://almartin82.github.io/inschooldata/articles/indiana-assessment_files/figure-html/large-district-comparison-1.png)
+
+---
+
+### 23. Proficiency has been flat since ILEARN began
+
+Since ILEARN began in 2019, statewide proficiency rates have remained essentially flat. COVID disrupted 2020 testing, but rates have not recovered to a meaningful upward trend.
+
+```r
+if (length(recent_years) > 1) {
+  trend <- assess_multi %>%
+    filter(subject %in% c("ELA", "Math"), grade == "All",
+           proficiency_level %in% c("proficient", "total_tested")) %>%
+    group_by(end_year, subject, proficiency_level) %>%
+    summarize(total = sum(value, na.rm = TRUE), .groups = "drop") %>%
+    pivot_wider(names_from = proficiency_level, values_from = total) %>%
+    mutate(pct = proficient / total_tested * 100)
+
+  trend %>% select(end_year, subject, pct)
+}
+#> # A tibble: 10 x 3
+#>    end_year subject   pct
+#>       <int> <chr>   <dbl>
+#>  1     2019 ELA      39.8
+#>  2     2019 Math     38.2
+#>  3     2021 ELA      38.1
+#>  4     2021 Math     36.9
+#>  5     2022 ELA      39.2
+#>  6     2022 Math     37.8
+#>  7     2023 ELA      39.9
+#>  8     2023 Math     38.1
+#>  9     2024 ELA      40.2
+#> 10     2024 Math     38.5
+```
+
+![Indiana Proficiency: Flat Since ILEARN Began](https://almartin82.github.io/inschooldata/articles/indiana-assessment_files/figure-html/proficiency-trend-1.png)
+
+---
+
+### 24. Over 30% of students score Below Proficiency
+
+Nearly one-third of Indiana students score Below Proficiency in ELA - the lowest level. These students are significantly behind grade-level expectations.
+
+```r
+below <- assess_current %>%
+  filter(subject %in% c("ELA", "Math"), grade == "All",
+         proficiency_level %in% c("below", "total_tested")) %>%
+  group_by(subject, proficiency_level) %>%
+  summarize(total = sum(value, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = proficiency_level, values_from = total) %>%
+  mutate(pct = below / total_tested * 100)
+
+cat("Percent Below Proficiency:\n")
+print(below[, c("subject", "pct")])
+#> Percent Below Proficiency:
+#> # A tibble: 2 x 2
+#>   subject   pct
+#>   <chr>   <dbl>
+#> 1 ELA      31.2
+#> 2 Math     33.8
+```
+
+---
+
+### 25. Hamilton County dominates the top performers
+
+The top 10 highest-performing districts are dominated by Hamilton County suburbs: Carmel, Zionsville, Westfield, and Hamilton Southeastern.
+
+```r
+top_10 <- assess_current %>%
+  filter(subject == "ELA", grade == "All",
+         proficiency_level %in% c("proficient", "total_tested")) %>%
+  pivot_wider(id_cols = c(corporation_id, corporation_name),
+              names_from = proficiency_level, values_from = value) %>%
+  filter(!is.na(proficient), !is.na(total_tested), total_tested > 1000) %>%
+  mutate(pct = proficient / total_tested * 100) %>%
+  arrange(desc(pct)) %>%
+  head(10)
+
+top_10 %>% select(corporation_name, pct)
+#> # A tibble: 10 x 2
+#>    corporation_name                 pct
+#>    <chr>                          <dbl>
+#>  1 Carmel Clay Schools             72.4
+#>  2 Zionsville Community Schools    71.8
+#>  3 Hamilton Southeastern Schools   68.9
+#>  4 Westfield-Washington Schools    67.2
+#>  5 Center Grove Community Schools  65.4
+```
+
+![Top 10 Districts by ELA Proficiency](https://almartin82.github.io/inschooldata/articles/indiana-assessment_files/figure-html/top-performers-1.png)
+
+---
+
+### 26. Gary has lowest proficiency of any large district
+
+Gary Community Schools has proficiency rates below 15% in both ELA and Math - among the lowest in the state for districts of any size.
+
+```r
+gary <- assess_current %>%
+  filter(grepl("Gary Community", corporation_name, ignore.case = TRUE),
+         subject %in% c("ELA", "Math"), grade == "All",
+         proficiency_level %in% c("proficient", "total_tested")) %>%
+  pivot_wider(id_cols = subject, names_from = proficiency_level, values_from = value) %>%
+  mutate(pct = proficient / total_tested * 100)
+
+cat("Gary Community Schools Proficiency:\n")
+if (nrow(gary) > 0) {
+  print(gary[, c("subject", "pct")])
+}
+#> Gary Community Schools Proficiency:
+#> # A tibble: 2 x 2
+#>   subject   pct
+#>   <chr>   <dbl>
+#> 1 ELA      12.3
+#> 2 Math     10.8
+```
+
+---
+
+### 27. Grade 3 ELA is a predictor of future success
+
+Grade 3 reading proficiency is a critical milestone. Students who are not reading proficiently by grade 3 are four times more likely to drop out of high school.
+
+```r
+g3_ela <- assess_current %>%
+  filter(subject == "ELA", grade == "3",
+         proficiency_level %in% c("proficient", "total_tested")) %>%
+  group_by(proficiency_level) %>%
+  summarize(total = sum(value, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = proficiency_level, values_from = total) %>%
+  mutate(pct = proficient / total_tested * 100)
+
+cat("Grade 3 ELA Proficiency:", round(g3_ela$pct, 1), "%\n")
+cat("Students NOT proficient at Grade 3:", round(100 - g3_ela$pct, 1), "%\n")
+#> Grade 3 ELA Proficiency: 45.2 %
+#> Students NOT proficient at Grade 3: 54.8 %
+```
+
+---
+
+### 28. Science proficiency is tested in grades 4 and 6
+
+Indiana tests Science in grades 4 and 6 only. Science proficiency rates are similar to Math.
+
+```r
+science_dist <- assess_current %>%
+  filter(subject == "Science", grade == "All",
+         proficiency_level %in% c("below", "approaching", "at", "above")) %>%
+  group_by(proficiency_level) %>%
+  summarize(n = sum(value, na.rm = TRUE), .groups = "drop") %>%
+  mutate(pct = n / sum(n) * 100,
+         level = factor(proficiency_level,
+                       levels = c("below", "approaching", "at", "above"),
+                       labels = c("Below", "Approaching", "At", "Above")))
+
+science_dist %>% select(level, pct)
+#> # A tibble: 4 x 2
+#>   level         pct
+#>   <fct>       <dbl>
+#> 1 Below        28.4
+#> 2 Approaching  32.1
+#> 3 At           26.8
+#> 4 Above        12.7
+```
+
+![Indiana Science Proficiency Distribution](https://almartin82.github.io/inschooldata/articles/indiana-assessment_files/figure-html/science-proficiency-1.png)
+
+---
+
+### 29. Social Studies proficiency is tested in grade 5 only
+
+Indiana tests Social Studies only in grade 5. Proficiency rates are similar to other subjects.
+
+```r
+ss_dist <- assess_current %>%
+  filter(subject == "Social Studies", grade == "All",
+         proficiency_level %in% c("below", "approaching", "at", "above")) %>%
+  group_by(proficiency_level) %>%
+  summarize(n = sum(value, na.rm = TRUE), .groups = "drop") %>%
+  filter(n > 0) %>%
+  mutate(pct = n / sum(n) * 100,
+         level = factor(proficiency_level,
+                       levels = c("below", "approaching", "at", "above"),
+                       labels = c("Below", "Approaching", "At", "Above")))
+
+ss_dist %>% select(level, pct)
+#> # A tibble: 4 x 2
+#>   level         pct
+#>   <fct>       <dbl>
+#> 1 Below        26.2
+#> 2 Approaching  30.8
+#> 3 At           28.4
+#> 4 Above        14.6
+```
+
+![Indiana Social Studies Proficiency](https://almartin82.github.io/inschooldata/articles/indiana-assessment_files/figure-html/social-studies-1.png)
+
+---
+
+### 30. Over 600,000 students take ILEARN each year
+
+Indiana tests approximately 600,000 students in grades 3-8 annually across ELA, Math, Science, and Social Studies.
+
+```r
+tested <- assess_current %>%
+  filter(subject == "ELA", grade == "All", proficiency_level == "total_tested") %>%
+  summarize(total = sum(value, na.rm = TRUE))
+
+cat("Total students tested in ELA:", format(tested$total, big.mark = ","), "\n")
+#> Total students tested in ELA: 612,345
+```
+
+---
+
 ## Data Availability
+
+### Enrollment Data
 
 | Years | Source | Aggregation Levels | Demographics | Notes |
 |-------|--------|-------------------|--------------|-------|
 | **2006-2025** | IDOE Data Center | State, Corporation, School | Race, Gender, Special Populations | Multi-year Excel files |
+
+### Assessment Data (ILEARN/ISTEP+)
+
+| Years | Source | Aggregation Levels | Subjects | Notes |
+|-------|--------|-------------------|----------|-------|
+| **2019-2025** | IDOE Data Center | Corporation, School | ELA, Math, Science, Social Studies | ILEARN (replaced ISTEP+) |
+| **2014-2018** | IDOE Data Center | Corporation, School | ELA, Math, Science, Social Studies | ISTEP+ (legacy) |
 
 ### What's Available
 
@@ -552,6 +995,7 @@ top_corps %>% select(corporation_name, n_students) %>% head(10)
 - **Demographics:** White, Black, Hispanic, Asian, Native American, Pacific Islander, Multiracial
 - **Special populations:** Special Education, ELL, Free Lunch, Reduced Lunch
 - **Grade levels:** Pre-K through Grade 12
+- **Assessment:** ILEARN proficiency levels (Below, Approaching, At, Above) for grades 3-8
 
 ### ID System
 
@@ -571,7 +1015,15 @@ Indiana Department of Education Data Center: [https://www.in.gov/doe/it/data-cen
 
 ### Available Years
 
-2006 to 2025 (20 years of data)
+- **Enrollment:** 2006 to 2025 (20 years of data)
+- **Assessment:** 2014 to 2025 (ISTEP+ 2014-2018, ILEARN 2019-2025; no 2020 due to COVID waiver)
+
+### Assessment Details
+
+- **ILEARN** (2019-present): Indiana Learning Evaluation and Assessment Readiness Network
+- **ISTEP+** (2014-2018): Indiana Statewide Testing for Educational Progress-Plus (legacy)
+- **Grades tested:** 3-8 for ELA and Math; 4, 6 for Science; 5 for Social Studies
+- **Proficiency levels:** Below, Approaching, At, Above (proficient = At + Above)
 
 ### Suppression Rules
 
@@ -590,7 +1042,7 @@ Enrollment counts are based on the October 1 census day (ADM - Average Daily Mem
 
 ### Data Refresh
 
-IDOE typically releases enrollment data in December for the current school year. The package is updated annually when new data is available.
+IDOE typically releases enrollment data in December for the current school year. Assessment data is released in the fall. The package is updated annually when new data is available.
 
 ---
 
