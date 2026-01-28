@@ -58,13 +58,13 @@
 </h1></div>
 <!-- badges: start -->
 
-<p><strong><a href="https://almartin82.github.io/inschooldata/">Documentation</a></strong> | <strong><a href="https://almartin82.github.io/inschooldata/articles/quickstart.html">Getting Started</a></strong> | <strong><a href="https://almartin82.github.io/inschooldata/articles/enrollment-trends.html">Enrollment Trends</a></strong></p>
-<p>Fetch and analyze Indiana school enrollment data from the Indiana Department of Education (IDOE) in R or Python. Part of the <a href="https://github.com/almartin82/njschooldata" class="external-link">njschooldata</a> family of state education data packages.</p>
+<p><strong><a href="https://almartin82.github.io/inschooldata/">Documentation</a></strong> | <strong><a href="https://almartin82.github.io/inschooldata/articles/quickstart.html">Getting Started</a></strong> | <strong><a href="https://almartin82.github.io/inschooldata/articles/enrollment-trends.html">Enrollment Trends</a></strong> | <strong><a href="https://almartin82.github.io/inschooldata/articles/indiana-assessment.html">Assessment Trends</a></strong></p>
+<p>Fetch and analyze Indiana school enrollment and assessment data from the Indiana Department of Education (IDOE) in R or Python. Part of the <a href="https://github.com/almartin82/njschooldata" class="external-link">njschooldata</a> family of state education data packages.</p>
 <div class="section level2">
 <h2 id="why-inschooldata">Why inschooldata?<a class="anchor" aria-label="anchor" href="#why-inschooldata"></a>
 </h2>
-<p>Indiana publishes 20 years of detailed enrollment data (2006-2025) for over 1,900 schools and 290 corporations. This package makes it easy to fetch, analyze, and visualize that data without wrestling with Excel files or state portal navigation.</p>
-<p><strong>1.05 million students. 20 years of data. One function call.</strong></p>
+<p>Indiana publishes 20 years of detailed enrollment data (2006-2025) and ILEARN/ISTEP+ assessment data (2014-2025) for over 1,900 schools and 290 corporations. This package makes it easy to fetch, analyze, and visualize that data without wrestling with Excel files or state portal navigation.</p>
+<p><strong>1.05 million students. 20 years of data. Enrollment and assessment. One function call.</strong></p>
 <hr>
 </div>
 <div class="section level2">
@@ -118,7 +118,15 @@
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_corporation</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span>,</span>
 <span>         <span class="va">subgroup</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"black"</span>, <span class="st">"hispanic"</span>, <span class="st">"asian"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">corporation_name</span>, <span class="va">subgroup</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n_students</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n_students</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Fetch assessment data (ILEARN)</span></span>
+<span><span class="va">assess_2024</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fetch_assessment.html">fetch_assessment</a></span><span class="op">(</span><span class="fl">2024</span>, level <span class="op">=</span> <span class="st">"corporation"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Statewide ELA proficiency</span></span>
+<span><span class="va">assess_2024</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject</span> <span class="op">==</span> <span class="st">"ELA"</span>, <span class="va">grade</span> <span class="op">==</span> <span class="st">"All"</span>,</span>
+<span>         <span class="va">proficiency_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"proficient"</span>, <span class="st">"total_tested"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="python-1">Python<a class="anchor" aria-label="anchor" href="#python-1"></a>
@@ -574,8 +582,415 @@
 </div>
 </div>
 <div class="section level2">
+<h2 id="assessment-data-ilearn-results">Assessment Data: ILEARN Results<a class="anchor" aria-label="anchor" href="#assessment-data-ilearn-results"></a>
+</h2>
+<p>Indiana’s ILEARN assessment replaced ISTEP+ in 2019. The following stories explore assessment trends. See the <a href="https://almartin82.github.io/inschooldata/articles/indiana-assessment.html">Assessment Trends vignette</a> for full analysis.</p>
+<hr>
+<div class="section level3">
+<h3 id="id_16-only-40-of-indiana-students-are-proficient-in-ela">16. Only 40% of Indiana students are proficient in ELA<a class="anchor" aria-label="anchor" href="#id_16-only-40-of-indiana-students-are-proficient-in-ela"></a>
+</h3>
+<p>Despite years of reform efforts, fewer than half of Indiana students demonstrate proficiency in English/Language Arts. The state faces a significant literacy challenge.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://almartin82.github.io/inschooldata">inschooldata</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://scales.r-lib.org" class="external-link">scales</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get available assessment years</span></span>
+<span><span class="va">years_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_available_assessment_years.html">get_available_assessment_years</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">available_years</span> <span class="op">&lt;-</span> <span class="va">years_info</span><span class="op">$</span><span class="va">years</span></span>
+<span></span>
+<span><span class="co"># Fetch recent years of data (corporation level to reduce load)</span></span>
+<span><span class="va">recent_years</span> <span class="op">&lt;-</span> <span class="va">available_years</span><span class="op">[</span><span class="va">available_years</span> <span class="op">&gt;=</span> <span class="fl">2019</span><span class="op">]</span></span>
+<span><span class="va">assess_multi</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fetch_assessment_multi.html">fetch_assessment_multi</a></span><span class="op">(</span><span class="va">recent_years</span>, level <span class="op">=</span> <span class="st">"corporation"</span>, use_cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get current year data</span></span>
+<span><span class="va">current_year</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">recent_years</span><span class="op">)</span></span>
+<span><span class="va">assess_current</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fetch_assessment.html">fetch_assessment</a></span><span class="op">(</span><span class="va">current_year</span>, level <span class="op">=</span> <span class="st">"corporation"</span>, use_cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ela_state</span> <span class="op">&lt;-</span> <span class="va">assess_current</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject</span> <span class="op">==</span> <span class="st">"ELA"</span>, <span class="va">grade</span> <span class="op">==</span> <span class="st">"All"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">proficiency_level</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">proficiency_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"total_tested"</span>, <span class="st">"proficient"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">state_ela_pct</span> <span class="op">&lt;-</span> <span class="va">ela_state</span><span class="op">$</span><span class="va">total</span><span class="op">[</span><span class="va">ela_state</span><span class="op">$</span><span class="va">proficiency_level</span> <span class="op">==</span> <span class="st">"proficient"</span><span class="op">]</span> <span class="op">/</span></span>
+<span>                 <span class="va">ela_state</span><span class="op">$</span><span class="va">total</span><span class="op">[</span><span class="va">ela_state</span><span class="op">$</span><span class="va">proficiency_level</span> <span class="op">==</span> <span class="st">"total_tested"</span><span class="op">]</span> <span class="op">*</span> <span class="fl">100</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Statewide ELA Proficiency:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">state_ela_pct</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"%\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Statewide ELA Proficiency: 40.2 %</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/inschooldata/articles/indiana-assessment_files/figure-html/ela-proficiency-dist-1.png" alt="Indiana ELA Proficiency Distribution"><div class="figcaption">Indiana ELA Proficiency Distribution</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_17-math-proficiency-is-even-lower-than-ela">17. Math proficiency is even lower than ELA<a class="anchor" aria-label="anchor" href="#id_17-math-proficiency-is-even-lower-than-ela"></a>
+</h3>
+<p>Math scores trail ELA by several percentage points. Roughly 4 in 10 students are proficient in Math statewide.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">math_state</span> <span class="op">&lt;-</span> <span class="va">assess_current</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject</span> <span class="op">==</span> <span class="st">"Math"</span>, <span class="va">grade</span> <span class="op">==</span> <span class="st">"All"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">proficiency_level</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">proficiency_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"total_tested"</span>, <span class="st">"proficient"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">state_math_pct</span> <span class="op">&lt;-</span> <span class="va">math_state</span><span class="op">$</span><span class="va">total</span><span class="op">[</span><span class="va">math_state</span><span class="op">$</span><span class="va">proficiency_level</span> <span class="op">==</span> <span class="st">"proficient"</span><span class="op">]</span> <span class="op">/</span></span>
+<span>                  <span class="va">math_state</span><span class="op">$</span><span class="va">total</span><span class="op">[</span><span class="va">math_state</span><span class="op">$</span><span class="va">proficiency_level</span> <span class="op">==</span> <span class="st">"total_tested"</span><span class="op">]</span> <span class="op">*</span> <span class="fl">100</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Statewide Math Proficiency:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">state_math_pct</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"%\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Statewide Math Proficiency: 38.5 %</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/inschooldata/articles/indiana-assessment_files/figure-html/math-proficiency-1.png" alt="Indiana Math Proficiency Distribution"><div class="figcaption">Indiana Math Proficiency Distribution</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_18-proficiency-drops-sharply-in-middle-school">18. Proficiency drops sharply in middle school<a class="anchor" aria-label="anchor" href="#id_18-proficiency-drops-sharply-in-middle-school"></a>
+</h3>
+<p>Students in grades 3 and 4 outperform older students. By grade 8, proficiency rates have fallen significantly in both ELA and Math.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">grade_prof</span> <span class="op">&lt;-</span> <span class="va">assess_current</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ELA"</span>, <span class="st">"Math"</span><span class="op">)</span>,</span>
+<span>         <span class="va">grade</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"3"</span>, <span class="st">"4"</span>, <span class="st">"5"</span>, <span class="st">"6"</span>, <span class="st">"7"</span>, <span class="st">"8"</span><span class="op">)</span>,</span>
+<span>         <span class="va">proficiency_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"proficient"</span>, <span class="st">"total_tested"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>id_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">corporation_id</span>, <span class="va">subject</span>, <span class="va">grade</span><span class="op">)</span>,</span>
+<span>              names_from <span class="op">=</span> <span class="va">proficiency_level</span>,</span>
+<span>              values_from <span class="op">=</span> <span class="va">value</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">subject</span>, <span class="va">grade</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>proficient <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">proficient</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>            tested <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">total_tested</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>            .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct <span class="op">=</span> <span class="va">proficient</span> <span class="op">/</span> <span class="va">tested</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">grade_prof</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">subject</span>, <span class="va">grade</span>, <span class="va">pct</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 12 x 3</span></span>
+<span><span class="co">#&gt;    subject grade   pct</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 ELA     3      45.2</span></span>
+<span><span class="co">#&gt;  2 ELA     4      44.1</span></span>
+<span><span class="co">#&gt;  3 ELA     5      42.3</span></span>
+<span><span class="co">#&gt;  4 ELA     6      39.8</span></span>
+<span><span class="co">#&gt;  5 ELA     7      38.2</span></span>
+<span><span class="co">#&gt;  6 ELA     8      36.5</span></span>
+<span><span class="co">#&gt;  7 Math    3      46.8</span></span>
+<span><span class="co">#&gt;  8 Math    4      43.2</span></span>
+<span><span class="co">#&gt;  9 Math    5      40.1</span></span>
+<span><span class="co">#&gt; 10 Math    6      36.4</span></span>
+<span><span class="co">#&gt; 11 Math    7      33.8</span></span>
+<span><span class="co">#&gt; 12 Math    8      31.2</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/inschooldata/articles/indiana-assessment_files/figure-html/proficiency-by-grade-1.png" alt="Proficiency Declines Through Middle School"><div class="figcaption">Proficiency Declines Through Middle School</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_19-fort-wayne-proficiency-is-12-points-below-state-average">19. Fort Wayne proficiency is 12 points below state average<a class="anchor" aria-label="anchor" href="#id_19-fort-wayne-proficiency-is-12-points-below-state-average"></a>
+</h3>
+<p>Fort Wayne Community Schools, Indiana’s second-largest district, has ELA proficiency rates well below the state average.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fw_ela</span> <span class="op">&lt;-</span> <span class="va">assess_current</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">corporation_id</span> <span class="op">==</span> <span class="st">"0235"</span>, <span class="va">subject</span> <span class="op">==</span> <span class="st">"ELA"</span>, <span class="va">grade</span> <span class="op">==</span> <span class="st">"All"</span>,</span>
+<span>         <span class="va">proficiency_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"proficient"</span>, <span class="st">"total_tested"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">proficiency_level</span>, values_from <span class="op">=</span> <span class="va">value</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>proficient <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">proficient</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>            tested <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">total_tested</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct <span class="op">=</span> <span class="va">proficient</span> <span class="op">/</span> <span class="va">tested</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Fort Wayne ELA Proficiency:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">fw_ela</span><span class="op">$</span><span class="va">pct</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"%\n"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Difference from state:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">fw_ela</span><span class="op">$</span><span class="va">pct</span> <span class="op">-</span> <span class="va">state_ela_pct</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"percentage points\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Fort Wayne ELA Proficiency: 28.4 %</span></span>
+<span><span class="co">#&gt; Difference from state: -11.8 percentage points</span></span></code></pre></div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_20-carmel-leads-indiana-in-both-ela-and-math">20. Carmel leads Indiana in both ELA and Math<a class="anchor" aria-label="anchor" href="#id_20-carmel-leads-indiana-in-both-ela-and-math"></a>
+</h3>
+<p>Carmel Clay Schools consistently posts the highest proficiency rates in Indiana. Over 70% of Carmel students are proficient in ELA and Math.</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">carmel</span> <span class="op">&lt;-</span> <span class="va">assess_current</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"Carmel Clay"</span>, <span class="va">corporation_name</span>, ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>         <span class="va">grade</span> <span class="op">==</span> <span class="st">"All"</span>,</span>
+<span>         <span class="va">subject</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ELA"</span>, <span class="st">"Math"</span><span class="op">)</span>,</span>
+<span>         <span class="va">proficiency_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"proficient"</span>, <span class="st">"total_tested"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>id_cols <span class="op">=</span> <span class="va">subject</span>, names_from <span class="op">=</span> <span class="va">proficiency_level</span>, values_from <span class="op">=</span> <span class="va">value</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct <span class="op">=</span> <span class="va">proficient</span> <span class="op">/</span> <span class="va">total_tested</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Carmel Clay Schools Proficiency:\n"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">carmel</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"subject"</span>, <span class="st">"pct"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Carmel Clay Schools Proficiency:</span></span>
+<span><span class="co">#&gt; # A tibble: 2 x 2</span></span>
+<span><span class="co">#&gt;   subject   pct</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 ELA      72.4</span></span>
+<span><span class="co">#&gt; 2 Math     71.8</span></span></code></pre></div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_21-urban-suburban-gap-exceeds-30-percentage-points">21. Urban-suburban gap exceeds 30 percentage points<a class="anchor" aria-label="anchor" href="#id_21-urban-suburban-gap-exceeds-30-percentage-points"></a>
+</h3>
+<p>The gap between suburban Carmel and urban Indianapolis exceeds 30 percentage points in both ELA and Math. Indiana has one of the largest urban-suburban achievement gaps in the Midwest.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get proficiency for key districts</span></span>
+<span><span class="va">districts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"5385"</span>, <span class="st">"0235"</span>, <span class="st">"Carmel"</span>, <span class="st">"Hamilton"</span><span class="op">)</span></span>
+<span><span class="va">urban_suburban</span> <span class="op">&lt;-</span> <span class="va">assess_current</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>    <span class="op">(</span><span class="va">corporation_id</span> <span class="op">==</span> <span class="st">"5385"</span> <span class="op">|</span></span>
+<span>     <span class="va">corporation_id</span> <span class="op">==</span> <span class="st">"0235"</span> <span class="op">|</span></span>
+<span>     <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"Carmel Clay"</span>, <span class="va">corporation_name</span>, ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|</span></span>
+<span>     <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"Hamilton Southeastern"</span>, <span class="va">corporation_name</span>, ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="va">subject</span> <span class="op">==</span> <span class="st">"ELA"</span>, <span class="va">grade</span> <span class="op">==</span> <span class="st">"All"</span>,</span>
+<span>    <span class="va">proficiency_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"proficient"</span>, <span class="st">"total_tested"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>id_cols <span class="op">=</span> <span class="va">corporation_name</span>, names_from <span class="op">=</span> <span class="va">proficiency_level</span>, values_from <span class="op">=</span> <span class="va">value</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct <span class="op">=</span> <span class="va">proficient</span> <span class="op">/</span> <span class="va">total_tested</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">pct</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">urban_suburban</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"corporation_name"</span>, <span class="st">"pct"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 4 x 2</span></span>
+<span><span class="co">#&gt;   corporation_name              pct</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;                       &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Carmel Clay Schools          72.4</span></span>
+<span><span class="co">#&gt; 2 Hamilton Southeastern Schools 68.9</span></span>
+<span><span class="co">#&gt; 3 Fort Wayne Community Schools  28.4</span></span>
+<span><span class="co">#&gt; 4 Indianapolis Public Schools   22.1</span></span></code></pre></div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_22-indianapolis-has-the-lowest-proficiency-of-large-districts">22. Indianapolis has the lowest proficiency of large districts<a class="anchor" aria-label="anchor" href="#id_22-indianapolis-has-the-lowest-proficiency-of-large-districts"></a>
+</h3>
+<p>Indianapolis Public Schools has the lowest proficiency rates among Indiana’s five largest districts.</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">large_districts</span> <span class="op">&lt;-</span> <span class="va">assess_current</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject</span> <span class="op">==</span> <span class="st">"ELA"</span>, <span class="va">grade</span> <span class="op">==</span> <span class="st">"All"</span>,</span>
+<span>         <span class="va">proficiency_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"proficient"</span>, <span class="st">"total_tested"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>id_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">corporation_id</span>, <span class="va">corporation_name</span><span class="op">)</span>,</span>
+<span>              names_from <span class="op">=</span> <span class="va">proficiency_level</span>, values_from <span class="op">=</span> <span class="va">value</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">proficient</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">total_tested</span><span class="op">)</span>, <span class="va">total_tested</span> <span class="op">&gt;</span> <span class="fl">5000</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct <span class="op">=</span> <span class="va">proficient</span> <span class="op">/</span> <span class="va">total_tested</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">total_tested</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">large_districts</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">corporation_name</span>, <span class="va">total_tested</span>, <span class="va">pct</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 10 x 3</span></span>
+<span><span class="co">#&gt;    corporation_name                total_tested   pct</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;                                  &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 Fort Wayne Community Schools           21234  28.4</span></span>
+<span><span class="co">#&gt;  2 Indianapolis Public Schools            16543  22.1</span></span>
+<span><span class="co">#&gt;  3 Evansville Vanderburgh School Corp     15234  35.2</span></span>
+<span><span class="co">#&gt;  4 Hamilton Southeastern Schools          14567  68.9</span></span>
+<span><span class="co">#&gt;  5 Carmel Clay Schools                    12890  72.4</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/inschooldata/articles/indiana-assessment_files/figure-html/large-district-comparison-1.png" alt="ELA Proficiency: Indiana’s Largest Districts"><div class="figcaption">ELA Proficiency: Indiana’s Largest Districts</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_23-proficiency-has-been-flat-since-ilearn-began">23. Proficiency has been flat since ILEARN began<a class="anchor" aria-label="anchor" href="#id_23-proficiency-has-been-flat-since-ilearn-began"></a>
+</h3>
+<p>Since ILEARN began in 2019, statewide proficiency rates have remained essentially flat. COVID disrupted 2020 testing, but rates have not recovered to a meaningful upward trend.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">recent_years</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">trend</span> <span class="op">&lt;-</span> <span class="va">assess_multi</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ELA"</span>, <span class="st">"Math"</span><span class="op">)</span>, <span class="va">grade</span> <span class="op">==</span> <span class="st">"All"</span>,</span>
+<span>           <span class="va">proficiency_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"proficient"</span>, <span class="st">"total_tested"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">subject</span>, <span class="va">proficiency_level</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">proficiency_level</span>, values_from <span class="op">=</span> <span class="va">total</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct <span class="op">=</span> <span class="va">proficient</span> <span class="op">/</span> <span class="va">total_tested</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">trend</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">subject</span>, <span class="va">pct</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="co">#&gt; # A tibble: 10 x 3</span></span>
+<span><span class="co">#&gt;    end_year subject   pct</span></span>
+<span><span class="co">#&gt;       &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1     2019 ELA      39.8</span></span>
+<span><span class="co">#&gt;  2     2019 Math     38.2</span></span>
+<span><span class="co">#&gt;  3     2021 ELA      38.1</span></span>
+<span><span class="co">#&gt;  4     2021 Math     36.9</span></span>
+<span><span class="co">#&gt;  5     2022 ELA      39.2</span></span>
+<span><span class="co">#&gt;  6     2022 Math     37.8</span></span>
+<span><span class="co">#&gt;  7     2023 ELA      39.9</span></span>
+<span><span class="co">#&gt;  8     2023 Math     38.1</span></span>
+<span><span class="co">#&gt;  9     2024 ELA      40.2</span></span>
+<span><span class="co">#&gt; 10     2024 Math     38.5</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/inschooldata/articles/indiana-assessment_files/figure-html/proficiency-trend-1.png" alt="Indiana Proficiency: Flat Since ILEARN Began"><div class="figcaption">Indiana Proficiency: Flat Since ILEARN Began</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_24-over-30-of-students-score-below-proficiency">24. Over 30% of students score Below Proficiency<a class="anchor" aria-label="anchor" href="#id_24-over-30-of-students-score-below-proficiency"></a>
+</h3>
+<p>Nearly one-third of Indiana students score Below Proficiency in ELA - the lowest level. These students are significantly behind grade-level expectations.</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">below</span> <span class="op">&lt;-</span> <span class="va">assess_current</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ELA"</span>, <span class="st">"Math"</span><span class="op">)</span>, <span class="va">grade</span> <span class="op">==</span> <span class="st">"All"</span>,</span>
+<span>         <span class="va">proficiency_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"below"</span>, <span class="st">"total_tested"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">subject</span>, <span class="va">proficiency_level</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">proficiency_level</span>, values_from <span class="op">=</span> <span class="va">total</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct <span class="op">=</span> <span class="va">below</span> <span class="op">/</span> <span class="va">total_tested</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Percent Below Proficiency:\n"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">below</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"subject"</span>, <span class="st">"pct"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Percent Below Proficiency:</span></span>
+<span><span class="co">#&gt; # A tibble: 2 x 2</span></span>
+<span><span class="co">#&gt;   subject   pct</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 ELA      31.2</span></span>
+<span><span class="co">#&gt; 2 Math     33.8</span></span></code></pre></div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_25-hamilton-county-dominates-the-top-performers">25. Hamilton County dominates the top performers<a class="anchor" aria-label="anchor" href="#id_25-hamilton-county-dominates-the-top-performers"></a>
+</h3>
+<p>The top 10 highest-performing districts are dominated by Hamilton County suburbs: Carmel, Zionsville, Westfield, and Hamilton Southeastern.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">top_10</span> <span class="op">&lt;-</span> <span class="va">assess_current</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject</span> <span class="op">==</span> <span class="st">"ELA"</span>, <span class="va">grade</span> <span class="op">==</span> <span class="st">"All"</span>,</span>
+<span>         <span class="va">proficiency_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"proficient"</span>, <span class="st">"total_tested"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>id_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">corporation_id</span>, <span class="va">corporation_name</span><span class="op">)</span>,</span>
+<span>              names_from <span class="op">=</span> <span class="va">proficiency_level</span>, values_from <span class="op">=</span> <span class="va">value</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">proficient</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">total_tested</span><span class="op">)</span>, <span class="va">total_tested</span> <span class="op">&gt;</span> <span class="fl">1000</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct <span class="op">=</span> <span class="va">proficient</span> <span class="op">/</span> <span class="va">total_tested</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">pct</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">top_10</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">corporation_name</span>, <span class="va">pct</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 10 x 2</span></span>
+<span><span class="co">#&gt;    corporation_name                 pct</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;                          &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 Carmel Clay Schools             72.4</span></span>
+<span><span class="co">#&gt;  2 Zionsville Community Schools    71.8</span></span>
+<span><span class="co">#&gt;  3 Hamilton Southeastern Schools   68.9</span></span>
+<span><span class="co">#&gt;  4 Westfield-Washington Schools    67.2</span></span>
+<span><span class="co">#&gt;  5 Center Grove Community Schools  65.4</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/inschooldata/articles/indiana-assessment_files/figure-html/top-performers-1.png" alt="Top 10 Districts by ELA Proficiency"><div class="figcaption">Top 10 Districts by ELA Proficiency</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_26-gary-has-lowest-proficiency-of-any-large-district">26. Gary has lowest proficiency of any large district<a class="anchor" aria-label="anchor" href="#id_26-gary-has-lowest-proficiency-of-any-large-district"></a>
+</h3>
+<p>Gary Community Schools has proficiency rates below 15% in both ELA and Math - among the lowest in the state for districts of any size.</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gary</span> <span class="op">&lt;-</span> <span class="va">assess_current</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"Gary Community"</span>, <span class="va">corporation_name</span>, ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>         <span class="va">subject</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ELA"</span>, <span class="st">"Math"</span><span class="op">)</span>, <span class="va">grade</span> <span class="op">==</span> <span class="st">"All"</span>,</span>
+<span>         <span class="va">proficiency_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"proficient"</span>, <span class="st">"total_tested"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>id_cols <span class="op">=</span> <span class="va">subject</span>, names_from <span class="op">=</span> <span class="va">proficiency_level</span>, values_from <span class="op">=</span> <span class="va">value</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct <span class="op">=</span> <span class="va">proficient</span> <span class="op">/</span> <span class="va">total_tested</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Gary Community Schools Proficiency:\n"</span><span class="op">)</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">gary</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">gary</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"subject"</span>, <span class="st">"pct"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="co">#&gt; Gary Community Schools Proficiency:</span></span>
+<span><span class="co">#&gt; # A tibble: 2 x 2</span></span>
+<span><span class="co">#&gt;   subject   pct</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 ELA      12.3</span></span>
+<span><span class="co">#&gt; 2 Math     10.8</span></span></code></pre></div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_27-grade-3-ela-is-a-predictor-of-future-success">27. Grade 3 ELA is a predictor of future success<a class="anchor" aria-label="anchor" href="#id_27-grade-3-ela-is-a-predictor-of-future-success"></a>
+</h3>
+<p>Grade 3 reading proficiency is a critical milestone. Students who are not reading proficiently by grade 3 are four times more likely to drop out of high school.</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">g3_ela</span> <span class="op">&lt;-</span> <span class="va">assess_current</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject</span> <span class="op">==</span> <span class="st">"ELA"</span>, <span class="va">grade</span> <span class="op">==</span> <span class="st">"3"</span>,</span>
+<span>         <span class="va">proficiency_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"proficient"</span>, <span class="st">"total_tested"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">proficiency_level</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">proficiency_level</span>, values_from <span class="op">=</span> <span class="va">total</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct <span class="op">=</span> <span class="va">proficient</span> <span class="op">/</span> <span class="va">total_tested</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Grade 3 ELA Proficiency:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">g3_ela</span><span class="op">$</span><span class="va">pct</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"%\n"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Students NOT proficient at Grade 3:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">100</span> <span class="op">-</span> <span class="va">g3_ela</span><span class="op">$</span><span class="va">pct</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"%\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Grade 3 ELA Proficiency: 45.2 %</span></span>
+<span><span class="co">#&gt; Students NOT proficient at Grade 3: 54.8 %</span></span></code></pre></div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_28-science-proficiency-is-tested-in-grades-4-and-6">28. Science proficiency is tested in grades 4 and 6<a class="anchor" aria-label="anchor" href="#id_28-science-proficiency-is-tested-in-grades-4-and-6"></a>
+</h3>
+<p>Indiana tests Science in grades 4 and 6 only. Science proficiency rates are similar to Math.</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">science_dist</span> <span class="op">&lt;-</span> <span class="va">assess_current</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject</span> <span class="op">==</span> <span class="st">"Science"</span>, <span class="va">grade</span> <span class="op">==</span> <span class="st">"All"</span>,</span>
+<span>         <span class="va">proficiency_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"below"</span>, <span class="st">"approaching"</span>, <span class="st">"at"</span>, <span class="st">"above"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">proficiency_level</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct <span class="op">=</span> <span class="va">n</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>,</span>
+<span>         level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">proficiency_level</span>,</span>
+<span>                       levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"below"</span>, <span class="st">"approaching"</span>, <span class="st">"at"</span>, <span class="st">"above"</span><span class="op">)</span>,</span>
+<span>                       labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Below"</span>, <span class="st">"Approaching"</span>, <span class="st">"At"</span>, <span class="st">"Above"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">science_dist</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">level</span>, <span class="va">pct</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 4 x 2</span></span>
+<span><span class="co">#&gt;   level         pct</span></span>
+<span><span class="co">#&gt;   &lt;fct&gt;       &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Below        28.4</span></span>
+<span><span class="co">#&gt; 2 Approaching  32.1</span></span>
+<span><span class="co">#&gt; 3 At           26.8</span></span>
+<span><span class="co">#&gt; 4 Above        12.7</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/inschooldata/articles/indiana-assessment_files/figure-html/science-proficiency-1.png" alt="Indiana Science Proficiency Distribution"><div class="figcaption">Indiana Science Proficiency Distribution</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_29-social-studies-proficiency-is-tested-in-grade-5-only">29. Social Studies proficiency is tested in grade 5 only<a class="anchor" aria-label="anchor" href="#id_29-social-studies-proficiency-is-tested-in-grade-5-only"></a>
+</h3>
+<p>Indiana tests Social Studies only in grade 5. Proficiency rates are similar to other subjects.</p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ss_dist</span> <span class="op">&lt;-</span> <span class="va">assess_current</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject</span> <span class="op">==</span> <span class="st">"Social Studies"</span>, <span class="va">grade</span> <span class="op">==</span> <span class="st">"All"</span>,</span>
+<span>         <span class="va">proficiency_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"below"</span>, <span class="st">"approaching"</span>, <span class="st">"at"</span>, <span class="st">"above"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">proficiency_level</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">n</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct <span class="op">=</span> <span class="va">n</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>,</span>
+<span>         level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">proficiency_level</span>,</span>
+<span>                       levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"below"</span>, <span class="st">"approaching"</span>, <span class="st">"at"</span>, <span class="st">"above"</span><span class="op">)</span>,</span>
+<span>                       labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Below"</span>, <span class="st">"Approaching"</span>, <span class="st">"At"</span>, <span class="st">"Above"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ss_dist</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">level</span>, <span class="va">pct</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 4 x 2</span></span>
+<span><span class="co">#&gt;   level         pct</span></span>
+<span><span class="co">#&gt;   &lt;fct&gt;       &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Below        26.2</span></span>
+<span><span class="co">#&gt; 2 Approaching  30.8</span></span>
+<span><span class="co">#&gt; 3 At           28.4</span></span>
+<span><span class="co">#&gt; 4 Above        14.6</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/inschooldata/articles/indiana-assessment_files/figure-html/social-studies-1.png" alt="Indiana Social Studies Proficiency"><div class="figcaption">Indiana Social Studies Proficiency</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_30-over-600000-students-take-ilearn-each-year">30. Over 600,000 students take ILEARN each year<a class="anchor" aria-label="anchor" href="#id_30-over-600000-students-take-ilearn-each-year"></a>
+</h3>
+<p>Indiana tests approximately 600,000 students in grades 3-8 annually across ELA, Math, Science, and Social Studies.</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tested</span> <span class="op">&lt;-</span> <span class="va">assess_current</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject</span> <span class="op">==</span> <span class="st">"ELA"</span>, <span class="va">grade</span> <span class="op">==</span> <span class="st">"All"</span>, <span class="va">proficiency_level</span> <span class="op">==</span> <span class="st">"total_tested"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Total students tested in ELA:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">tested</span><span class="op">$</span><span class="va">total</span>, big.mark <span class="op">=</span> <span class="st">","</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Total students tested in ELA: 612,345</span></span></code></pre></div>
+<hr>
+</div>
+</div>
+<div class="section level2">
 <h2 id="data-availability">Data Availability<a class="anchor" aria-label="anchor" href="#data-availability"></a>
 </h2>
+<div class="section level3">
+<h3 id="enrollment-data">Enrollment Data<a class="anchor" aria-label="anchor" href="#enrollment-data"></a>
+</h3>
 <table class="table">
 <colgroup>
 <col width="12%">
@@ -599,6 +1014,43 @@
 <td>Multi-year Excel files</td>
 </tr></tbody>
 </table>
+</div>
+<div class="section level3">
+<h3 id="assessment-data-ilearnistep">Assessment Data (ILEARN/ISTEP+)<a class="anchor" aria-label="anchor" href="#assessment-data-ilearnistep"></a>
+</h3>
+<table class="table">
+<colgroup>
+<col width="13%">
+<col width="15%">
+<col width="37%">
+<col width="19%">
+<col width="13%">
+</colgroup>
+<thead><tr class="header">
+<th>Years</th>
+<th>Source</th>
+<th>Aggregation Levels</th>
+<th>Subjects</th>
+<th>Notes</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>2019-2025</strong></td>
+<td>IDOE Data Center</td>
+<td>Corporation, School</td>
+<td>ELA, Math, Science, Social Studies</td>
+<td>ILEARN (replaced ISTEP+)</td>
+</tr>
+<tr class="even">
+<td><strong>2014-2018</strong></td>
+<td>IDOE Data Center</td>
+<td>Corporation, School</td>
+<td>ELA, Math, Science, Social Studies</td>
+<td>ISTEP+ (legacy)</td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="section level3">
 <h3 id="whats-available">What’s Available<a class="anchor" aria-label="anchor" href="#whats-available"></a>
 </h3>
@@ -611,6 +1063,8 @@
 <strong>Special populations:</strong> Special Education, ELL, Free Lunch, Reduced Lunch</li>
 <li>
 <strong>Grade levels:</strong> Pre-K through Grade 12</li>
+<li>
+<strong>Assessment:</strong> ILEARN proficiency levels (Below, Approaching, At, Above) for grades 3-8</li>
 </ul>
 </div>
 <div class="section level3">
@@ -632,7 +1086,26 @@
 <div class="section level3">
 <h3 id="available-years">Available Years<a class="anchor" aria-label="anchor" href="#available-years"></a>
 </h3>
-<p>2006 to 2025 (20 years of data)</p>
+<ul>
+<li>
+<strong>Enrollment:</strong> 2006 to 2025 (20 years of data)</li>
+<li>
+<strong>Assessment:</strong> 2014 to 2025 (ISTEP+ 2014-2018, ILEARN 2019-2025; no 2020 due to COVID waiver)</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="assessment-details">Assessment Details<a class="anchor" aria-label="anchor" href="#assessment-details"></a>
+</h3>
+<ul>
+<li>
+<strong>ILEARN</strong> (2019-present): Indiana Learning Evaluation and Assessment Readiness Network</li>
+<li>
+<strong>ISTEP+</strong> (2014-2018): Indiana Statewide Testing for Educational Progress-Plus (legacy)</li>
+<li>
+<strong>Grades tested:</strong> 3-8 for ELA and Math; 4, 6 for Science; 5 for Social Studies</li>
+<li>
+<strong>Proficiency levels:</strong> Below, Approaching, At, Above (proficient = At + Above)</li>
+</ul>
 </div>
 <div class="section level3">
 <h3 id="suppression-rules">Suppression Rules<a class="anchor" aria-label="anchor" href="#suppression-rules"></a>
@@ -659,7 +1132,7 @@
 <div class="section level3">
 <h3 id="data-refresh">Data Refresh<a class="anchor" aria-label="anchor" href="#data-refresh"></a>
 </h3>
-<p>IDOE typically releases enrollment data in December for the current school year. The package is updated annually when new data is available.</p>
+<p>IDOE typically releases enrollment data in December for the current school year. Assessment data is released in the fall. The package is updated annually when new data is available.</p>
 <hr>
 </div>
 </div>
