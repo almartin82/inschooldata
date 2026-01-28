@@ -49,6 +49,17 @@ reference:
   - id_enr_aggs
   - enr_grade_aggs
 
+- title: Assessment Data
+  desc: Download and process assessment data from IDOE
+  contents:
+  - fetch_assessment
+  - fetch_assessment_multi
+  - fetch_corporation_assessment
+  - fetch_school_assessment
+  - get_available_assessment_years
+  - tidy_assessment
+  - id_assessment_aggs
+
 - title: Cache Management
   desc: Manage locally cached data
   contents:
